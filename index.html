@@ -480,9 +480,9 @@ code{font-family:'JetBrains Mono',monospace;font-size:12px;}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // DATA MODEL & PERSISTENCE
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 const DB_KEY = 'sgfa_v1';
 
 const DEFAULT_CFG = {
@@ -492,18 +492,18 @@ const DEFAULT_CFG = {
   mandateYear: 2025,
   email: 'aiesec.abomeycalavi@aiesec.net',
   phone: '+229 40531497',
-  addr: 'AP2 office, ENEAM, GBEGAMEY, Cotonou, République du Bénin',
+  addr: 'AP2 office, ENEAM, GBEGAMEY, Cotonou, R\u00E9publique du B\u00E9nin',
   ifu: '',
   momoMTN: '01 90 19 28 10',
   momoMoov: '',
-  bankName: 'Centre de Chèques Postaux — La Poste',
+  bankName: 'Centre de Ch\u00E8ques Postaux \u2014 La Poste',
   bankAccount: '144038562010',
-  bankHolder: 'ASSOCIATION INTERNATIONALES DES ÉTUDIANTS EN SCIENCES ÉCONOMIQUES ET COMMERCIALES',
+  bankHolder: 'ASSOCIATION INTERNATIONALES DES \u00C9TUDIANTS EN SCIENCES \u00C9CONOMIQUES ET COMMERCIALES',
   finName: '',
   finRole: 'VP Finance & Legal',
   finEmail: '',
   finPhone: '',
-  defaultNotes: 'Si le paiement et le scan du reçu ne sont pas reçus dans les délais, des sanctions seront appliquées. En cas de dette, contactez le VP F&L dans les plus brefs délais.',
+  defaultNotes: 'Si le paiement et le scan du re\u00E7u ne sont pas re\u00E7us dans les d\u00E9lais, des sanctions seront appliqu\u00E9es. En cas de dette, contactez le VP F&L dans les plus brefs d\u00E9lais.',
   validationThreshold: 25000,
   accessCode: 'aiesec2025',
   prefixFac: 'FAC',
@@ -522,21 +522,21 @@ const MOTIFS_REVENUE = [
   {code:'IGV-ROY', label:'iGV Affiliation Royalty'},
   {code:'SPON', label:'Sponsoring partenaire'},
   {code:'COTIS', label:'Cotisation annuelle'},
-  {code:'LATE-FEE', label:'Pénalité retard'},
-  {code:'EVENT', label:'Recette événement'},
+  {code:'LATE-FEE', label:'P\u00E9nalit\u00E9 retard'},
+  {code:'EVENT', label:'Recette \u00E9v\u00E9nement'},
   {code:'OTHER-REV', label:'Autre recette'}
 ];
 const MOTIFS_EXPENSE = [
   {code:'MC-FEE', label:'MC Affiliation Fee'},
   {code:'LOGIS', label:'Logistique'},
-  {code:'TRANS', label:'Transport/Déplacement'},
-  {code:'HEBERG', label:'Hébergement'},
+  {code:'TRANS', label:'Transport/D\u00E9placement'},
+  {code:'HEBERG', label:'H\u00E9bergement'},
   {code:'MKT-EXP', label:'Marketing/Communication'},
   {code:'IMPR', label:'Impression/Papeterie'},
   {code:'BANQUE', label:'Frais bancaires'},
-  {code:'TEL', label:'Téléphone/Internet'},
-  {code:'EVENT-EXP', label:'Frais événement'},
-  {code:'OTHER-EXP', label:'Autre dépense'}
+  {code:'TEL', label:'T\u00E9l\u00E9phone/Internet'},
+  {code:'EVENT-EXP', label:'Frais \u00E9v\u00E9nement'},
+  {code:'OTHER-EXP', label:'Autre d\u00E9pense'}
 ];
 
 let DB = {cfg:{...DEFAULT_CFG}, transactions:[], budgets:[], users:[], auditLog:[], invoiceSeq:{FAC:0,REC:0,DEV:0}};
@@ -554,15 +554,15 @@ function loadDB(){
   }
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // UTILS
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function hashPW(p){let h=0;for(let i=0;i<p.length;i++){h=((h<<5)-h)+p.charCodeAt(i);h|=0;}return 'h'+Math.abs(h);}
 function uid(){return 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function nowStr(){return new Date().toLocaleString('fr-FR');}
 function today(){return new Date().toISOString().split('T')[0];}
 function fmtXOF(n){return Number(n).toLocaleString('fr-FR')+' FCFA';}
-function fmtDate(d){if(!d)return '—';try{return new Date(d).toLocaleDateString('fr-FR');}catch(e){return d;}}
+function fmtDate(d){if(!d)return '\u2014';try{return new Date(d).toLocaleDateString('fr-FR');}catch(e){return d;}}
 function v(id){return document.getElementById(id)?.value?.trim()||'';}
 function el(id){return document.getElementById(id);}
 function genDocNum(type){
@@ -584,7 +584,7 @@ function canApprove(){return ME&&(ME.role==='lcp'||ME.role==='vpfl');}
 
 // Audit
 function addLog(action, entityType, entityId, oldVal, newVal){
-  DB.auditLog.unshift({id:uid(), userId:ME?ME.id:'?', userName:ME?ME.fname+' '+ME.lname:'Système', userRole:ME?ME.role:'?', action, entityType, entityId, oldVal, newVal, ts:nowStr()});
+  DB.auditLog.unshift({id:uid(), userId:ME?ME.id:'?', userName:ME?ME.fname+' '+ME.lname:'Syst\u00E8me', userRole:ME?ME.role:'?', action, entityType, entityId, oldVal, newVal, ts:nowStr()});
   if(DB.auditLog.length>500) DB.auditLog=DB.auditLog.slice(0,500);
   persist();
 }
@@ -600,9 +600,9 @@ function toast(msg,type=''){
   setTimeout(()=>t.remove(),2800);
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // AUTH
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function showForm(id){
   ['LF','RF'].forEach(x=>el(x).classList.toggle('hidden',x!==id));
 }
@@ -629,12 +629,12 @@ function doRegister(){
   if(!fn||!ln||!u||!pw){err.textContent='Tous les champs obligatoires.';err.style.display='block';return;}
   if(pw.length<6){err.textContent='Mot de passe trop court (min. 6).';err.style.display='block';return;}
   if(pw!==pw2){err.textContent='Les mots de passe ne correspondent pas.';err.style.display='block';return;}
-  if(DB.users.find(x=>x.username===u)){err.textContent="Ce nom d'utilisateur est déjà pris.";err.style.display='block';return;}
-  if(role!=='vpd'&&code!==DB.cfg.accessCode){err.textContent='Code d\'accès incorrect.';err.style.display='block';return;}
+  if(DB.users.find(x=>x.username===u)){err.textContent="Ce nom d'utilisateur est d\u00E9j\u00E0 pris.";err.style.display='block';return;}
+  if(role!=='vpd'&&code!==DB.cfg.accessCode){err.textContent='Code d\'acc\u00E8s incorrect.';err.style.display='block';return;}
   const nu={id:uid(),username:u,fname:fn,lname:ln,role,dept:role==='vpd'?dept:null,pw:hashPW(pw),created:nowStr()};
   DB.users.push(nu);persist();
   addLog('REGISTER','user',nu.id,null,{username:u,role});
-  suc.textContent='Compte créé ! Vous pouvez maintenant vous connecter.';suc.style.display='block';
+  suc.textContent='Compte cr\u00E9\u00E9 ! Vous pouvez maintenant vous connecter.';suc.style.display='block';
   setTimeout(()=>showForm('LF'),2000);
 }
 function doLogout(){
@@ -659,7 +659,7 @@ function updateSidebar(){
   el('sb-lc').textContent=DB.cfg.lc;
   el('sb-term').textContent=DB.cfg.term;
   el('sb-uname').textContent=ME.fname+' '+ME.lname;
-  el('sb-urole').textContent={vpfl:'VP Finance & Legal',lcp:'LCP',vpd:'VP Département'}[ME.role]||ME.role;
+  el('sb-urole').textContent={vpfl:'VP Finance & Legal',lcp:'LCP',vpd:'VP D\u00E9partement'}[ME.role]||ME.role;
   el('sb-av').textContent=(ME.fname[0]+(ME.lname[0]||'')).toUpperCase();
   el('tb-lc').textContent=DB.cfg.lc;
 }
@@ -681,10 +681,10 @@ function updateSBCounts(){
   el('sb-exp-count').style.display=exps.length?'inline-flex':'none';
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // NAVIGATION
-// ══════════════════════════════════════════════════════════
-const PAGE_TITLES={dashboard:'Tableau de bord',revenue:'Entrées — Revenus',expenses:'Sorties — Dépenses',invoices:'Factures & Reçus',budgets:'Budgets par département',audit:'Audit & Journal',reports:'Rapports & Export',settings:'Paramètres'};
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+const PAGE_TITLES={dashboard:'Tableau de bord',revenue:'Entr\u00E9es \u2014 Revenus',expenses:'Sorties \u2014 D\u00E9penses',invoices:'Factures & Re\u00E7us',budgets:'Budgets par d\u00E9partement',audit:'Audit & Journal',reports:'Rapports & Export',settings:'Param\u00E8tres'};
 function goTo(pg, el_item){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('act'));
@@ -709,9 +709,9 @@ function renderPage(pg){
   }
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // MODAL SYSTEM
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function showModal(id,html,large=false){
   closeModal();
   const wrap=document.createElement('div');
@@ -725,9 +725,9 @@ function closeModal(){
   document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // DASHBOARD
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderDashboard(){
   const txs=DB.transactions;
   const revs=txs.filter(t=>t.type==='revenue');
@@ -746,7 +746,7 @@ function renderDashboard(){
 
   // Monthly (last 6 months)
   const months=[];
-  for(let i=5;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);months.push({label:d.toLocaleDateString('fr-FR',{month:'short'}),rev:0,exp:0,date:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);}
+  for(let i=5;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);months.push({label:d.toLocaleDateString('fr-FR',{month:'short'}),rev:0,exp:0,date:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')});}
   txs.forEach(t=>{
     const m=t.date?.substring(0,7);
     const mo=months.find(x=>x.date===m);
@@ -757,16 +757,16 @@ function renderDashboard(){
   el('pg-dashboard').innerHTML=`
     <div class="stat-grid">
       <div class="stat-card blue"><div class="slabel">Revenus totaux</div><div class="sval">${fmtXOF(totalRev)}</div><div class="ssub">${revs.length} transaction${revs.length>1?'s':''}</div></div>
-      <div class="stat-card red"><div class="slabel">Dépenses totales</div><div class="sval">${fmtXOF(totalExp)}</div><div class="ssub">${exps.length} dépense${exps.length>1?'s':''}</div></div>
-      <div class="stat-card ${balance>=0?'green':'red'}"><div class="slabel">Solde (trésorerie)</div><div class="sval">${fmtXOF(balance)}</div><div class="ssub">${balance>=0?'Excédent':'Déficit'}</div></div>
-      <div class="stat-card teal"><div class="slabel">Taux recouvrement</div><div class="sval">${totalRev?Math.round(totalPaid/totalRev*100):0}%</div><div class="ssub">${fmtXOF(totalPaid)} encaissé</div></div>
-      ${pending?`<div class="stat-card orange"><div class="slabel">En attente validation</div><div class="sval">${pending}</div><div class="ssub">dépense${pending>1?'s':''} LCP</div></div>`:''}
+      <div class="stat-card red"><div class="slabel">D\u00E9penses totales</div><div class="sval">${fmtXOF(totalExp)}</div><div class="ssub">${exps.length} d\u00E9pense${exps.length>1?'s':''}</div></div>
+      <div class="stat-card ${balance>=0?'green':'red'}"><div class="slabel">Solde (tr\u00E9sorerie)</div><div class="sval">${fmtXOF(balance)}</div><div class="ssub">${balance>=0?'Exc\u00E9dent':'D\u00E9ficit'}</div></div>
+      <div class="stat-card teal"><div class="slabel">Taux recouvrement</div><div class="sval">${totalRev?Math.round(totalPaid/totalRev*100):0}%</div><div class="ssub">${fmtXOF(totalPaid)} encaiss\u00E9</div></div>
+      ${pending?`<div class="stat-card orange"><div class="slabel">En attente validation</div><div class="sval">${pending}</div><div class="ssub">d\u00E9pense${pending>1?'s':''} LCP</div></div>`:''}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
       <div class="card">
         <div class="card-title">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
-          Évolution 6 mois
+          \u00C9volution 6 mois
         </div>
         <div style="display:flex;align-items:flex-end;gap:8px;height:100px;padding-top:8px">
           ${months.map(m=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
@@ -779,57 +779,57 @@ function renderDashboard(){
         </div>
         <div class="flex gap8" style="margin-top:8px;font-size:11px;color:var(--ink3)">
           <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#037EF3;border-radius:2px"></span>Revenus</span>
-          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#E53935;border-radius:2px"></span>Dépenses</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#E53935;border-radius:2px"></span>D\u00E9penses</span>
         </div>
       </div>
       <div class="card">
         <div class="card-title">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
-          Top départements (revenus)
+          Top d\u00E9partements (revenus)
         </div>
-        ${topDepts.length?`<div class="chart-bar-wrap">${topDepts.map(([d,amt])=>{const pct=Math.round(amt/maxRevDept*100);const dc=DEPT_COLORS[d]||'gray';const col={'blue':'#037EF3','teal':'#0CB9C1','purple':'#7552CC','orange':'#F48924','green':'#00C16E','red':'#E53935','yellow':'#F0B429','gray':'#8898AA'}[dc]||'#8898AA';return `<div class="chart-bar-item"><div class="chart-bar-label">${d}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%;background:${col}">${pct}%</div></div><div class="chart-bar-amount">${fmtXOF(amt)}</div></div>`}).join('')}</div>`:'<p class="text-muted text-sm">Aucune donnée</p>'}
+        ${topDepts.length?`<div class="chart-bar-wrap">${topDepts.map(([d,amt])=>{const pct=Math.round(amt/maxRevDept*100);const dc=DEPT_COLORS[d]||'gray';const col={'blue':'#037EF3','teal':'#0CB9C1','purple':'#7552CC','orange':'#F48924','green':'#00C16E','red':'#E53935','yellow':'#F0B429','gray':'#8898AA'}[dc]||'#8898AA';return `<div class="chart-bar-item"><div class="chart-bar-label">${d}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%;background:${col}">${pct}%</div></div><div class="chart-bar-amount">${fmtXOF(amt)}</div></div>`}).join('')}</div>`:'<p class="text-muted text-sm">Aucune donn\u00E9e</p>'}
       </div>
     </div>
     <div class="card">
       <div class="card-title">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="21,8 21,21 3,21 3,8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-        Dernières transactions
+        Derni\u00E8res transactions
       </div>
-      ${txs.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>N°</th><th>Type</th><th>Date</th><th>Motif</th><th>Département</th><th>Montant</th><th>Statut</th></tr></thead><tbody>${txs.slice(0,8).map(t=>`<tr><td class="doc-num">${t.docNum||'—'}</td><td><span class="badge badge-${t.type==='revenue'?'green':'orange'}">${t.type==='revenue'?'Entrée':'Sortie'}</span></td><td style="white-space:nowrap">${fmtDate(t.date)}</td><td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.motifLabel||'—'}</td><td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'—'}</span></td><td class="amount">${fmtXOF(t.amount)}</td><td>${statusBadge(t)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty-state"><p>Aucune transaction enregistrée.</p></div>'}
+      ${txs.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>N\u00B0</th><th>Type</th><th>Date</th><th>Motif</th><th>D\u00E9partement</th><th>Montant</th><th>Statut</th></tr></thead><tbody>${txs.slice(0,8).map(t=>`<tr><td class="doc-num">${t.docNum||'\u2014'}</td><td><span class="badge badge-${t.type==='revenue'?'green':'orange'}">${t.type==='revenue'?'Entr\u00E9e':'Sortie'}</span></td><td style="white-space:nowrap">${fmtDate(t.date)}</td><td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.motifLabel||'\u2014'}</td><td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'\u2014'}</span></td><td class="amount">${fmtXOF(t.amount)}</td><td>${statusBadge(t)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty-state"><p>Aucune transaction enregistr\u00E9e.</p></div>'}
     </div>`;
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // STATUS HELPERS
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function statusBadge(t){
   if(t.type==='revenue'){
     const m={pending:'badge-orange',partial:'badge-blue',paid:'badge-green',cancelled:'badge-gray'};
-    const l={pending:'En attente',partial:'Partiel',paid:'Payé',cancelled:'Annulé'};
+    const l={pending:'En attente',partial:'Partiel',paid:'Pay\u00E9',cancelled:'Annul\u00E9'};
     return `<span class="badge ${m[t.status]||'badge-gray'}">${l[t.status]||t.status}</span>`;
   }else{
     const m={pending:'badge-orange',approved:'badge-green',rejected:'badge-red'};
-    const l={pending:'Attente LCP',approved:'Approuvé',rejected:'Rejeté'};
+    const l={pending:'Attente LCP',approved:'Approuv\u00E9',rejected:'Rejet\u00E9'};
     return `<span class="badge ${m[t.workflowStatus]||'badge-gray'}">${l[t.workflowStatus]||t.workflowStatus}</span>`;
   }
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // REVENUE PAGE
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderRevenue(){
   const revs=DB.transactions.filter(t=>t.type==='revenue').sort((a,b)=>b.date?.localeCompare(a.date));
   el('pg-revenue').innerHTML=`
     <div class="flex gap8" style="margin-bottom:16px;flex-wrap:wrap">
-      <input id="rev-search" placeholder="Rechercher…" oninput="filterRevenue()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
+      <input id="rev-search" placeholder="Rechercher\u2026" oninput="filterRevenue()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
       <select id="rev-dept" onchange="filterRevenue()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
         <option value="">Tous depts</option>${DEPARTMENTS.map(d=>`<option>${d}</option>`).join('')}
       </select>
       <select id="rev-status" onchange="filterRevenue()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
-        <option value="">Tous statuts</option><option value="pending">En attente</option><option value="partial">Partiel</option><option value="paid">Payé</option>
+        <option value="">Tous statuts</option><option value="pending">En attente</option><option value="partial">Partiel</option><option value="paid">Pay\u00E9</option>
       </select>
       <div class="ml-auto flex gap8">
-        ${isAdmin()?`<button class="btn btn-primary btn-sm" onclick="openRevModal()">+ Nouvelle entrée</button>`:''}
+        ${isAdmin()?`<button class="btn btn-primary btn-sm" onclick="openRevModal()">+ Nouvelle entr\u00E9e</button>`:''}
       </div>
     </div>
     <div id="rev-table-wrap">
@@ -837,15 +837,15 @@ function renderRevenue(){
     </div>`;
 }
 function buildRevTable(revs){
-  if(!revs.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><p>Aucune entrée enregistrée.</p></div>`;
-  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>N°</th><th>Date</th><th>Client</th><th>Motif</th><th>Dept</th><th>EXPA ID</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead><tbody>
+  if(!revs.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><p>Aucune entr\u00E9e enregistr\u00E9e.</p></div>`;
+  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>N\u00B0</th><th>Date</th><th>Client</th><th>Motif</th><th>Dept</th><th>EXPA ID</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead><tbody>
   ${revs.map(t=>`<tr>
-    <td class="doc-num" style="cursor:pointer" onclick="viewInvoice('${t.id}')">${t.docNum||'—'}</td>
+    <td class="doc-num" style="cursor:pointer" onclick="viewInvoice('${t.id}')">${t.docNum||'\u2014'}</td>
     <td style="white-space:nowrap">${fmtDate(t.date)}</td>
-    <td>${t.client||'—'}</td>
-    <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${t.motifLabel||''}">${t.motifLabel||'—'}</td>
-    <td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'—'}</span></td>
-    <td class="text-sm">${t.expaId?`<code>${t.expaId}</code>`:'—'}</td>
+    <td>${t.client||'\u2014'}</td>
+    <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${t.motifLabel||''}">${t.motifLabel||'\u2014'}</td>
+    <td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'\u2014'}</span></td>
+    <td class="text-sm">${t.expaId?`<code>${t.expaId}</code>`:'\u2014'}</td>
     <td class="amount">${fmtXOF(t.amount)}</td>
     <td>${statusBadge(t)}</td>
     <td><div class="actions">
@@ -855,7 +855,7 @@ function buildRevTable(revs){
       ${canEdit(t)?`<button class="btn-icon" onclick="editTransaction('${t.id}')" title="Modifier">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </button>`:''}
-      ${t.status!=='paid'&&isAdmin()?`<button class="btn btn-xs" onclick="markPaid('${t.id}')" style="background:var(--green-bg);color:#00814A;border:none">Marquer payé</button>`:''}
+      ${t.status!=='paid'&&isAdmin()?`<button class="btn btn-xs" onclick="markPaid('${t.id}')" style="background:var(--green-bg);color:#00814A;border:none">Marquer pay\u00E9</button>`:''}
       ${t.status==='paid'?`<button class="btn-icon" onclick="printInvoice('${t.id}')" title="Imprimer">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
       </button>`:''}
@@ -872,35 +872,35 @@ function filterRevenue(){
   el('rev-table-wrap').innerHTML=buildRevTable(revs);
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // EXPENSES PAGE
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderExpenses(){
   const exps=DB.transactions.filter(t=>t.type==='expense').sort((a,b)=>b.date?.localeCompare(a.date));
   el('pg-expenses').innerHTML=`
     <div class="flex gap8" style="margin-bottom:16px;flex-wrap:wrap">
-      <input id="exp-search" placeholder="Rechercher…" oninput="filterExpenses()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
+      <input id="exp-search" placeholder="Rechercher\u2026" oninput="filterExpenses()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
       <select id="exp-dept" onchange="filterExpenses()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
         <option value="">Tous depts</option>${DEPARTMENTS.map(d=>`<option>${d}</option>`).join('')}
       </select>
       <select id="exp-ws" onchange="filterExpenses()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
-        <option value="">Tous statuts</option><option value="pending">En attente LCP</option><option value="approved">Approuvé</option><option value="rejected">Rejeté</option>
+        <option value="">Tous statuts</option><option value="pending">En attente LCP</option><option value="approved">Approuv\u00E9</option><option value="rejected">Rejet\u00E9</option>
       </select>
-      ${isAdmin()||isLCP()?`<div class="ml-auto"><button class="btn btn-primary btn-sm" onclick="openExpModal()">+ Nouvelle dépense</button></div>`:''}
+      ${isAdmin()||isLCP()?`<div class="ml-auto"><button class="btn btn-primary btn-sm" onclick="openExpModal()">+ Nouvelle d\u00E9pense</button></div>`:''}
     </div>
     <div id="exp-table-wrap">${buildExpTable(exps)}</div>`;
 }
 function buildExpTable(exps){
-  if(!exps.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><p>Aucune dépense enregistrée.</p></div>`;
-  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>N°</th><th>Date</th><th>Description</th><th>Catégorie</th><th>Dept</th><th>Montant</th><th>Justificatif</th><th>Statut workflow</th><th>Actions</th></tr></thead><tbody>
+  if(!exps.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><p>Aucune d\u00E9pense enregistr\u00E9e.</p></div>`;
+  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>N\u00B0</th><th>Date</th><th>Description</th><th>Cat\u00E9gorie</th><th>Dept</th><th>Montant</th><th>Justificatif</th><th>Statut workflow</th><th>Actions</th></tr></thead><tbody>
   ${exps.map(t=>`<tr>
-    <td class="doc-num">${t.docNum||'—'}</td>
+    <td class="doc-num">${t.docNum||'\u2014'}</td>
     <td style="white-space:nowrap">${fmtDate(t.date)}</td>
-    <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.description||t.motifLabel||'—'}</td>
-    <td style="font-size:12px">${t.motifLabel||'—'}</td>
-    <td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'—'}</span></td>
+    <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.description||t.motifLabel||'\u2014'}</td>
+    <td style="font-size:12px">${t.motifLabel||'\u2014'}</td>
+    <td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'\u2014'}</span></td>
     <td class="amount">${fmtXOF(t.amount)}</td>
-    <td>${t.proofFile?`<span class="badge badge-green">✓ Joint</span>`:`<span class="badge badge-gray">Absent</span>`}</td>
+    <td>${t.proofFile?`<span class="badge badge-green">\u2713 Joint</span>`:`<span class="badge badge-gray">Absent</span>`}</td>
     <td>${wfBadge(t.workflowStatus)}</td>
     <td><div class="actions">
       ${t.workflowStatus==='pending'&&canApprove()?`
@@ -909,14 +909,14 @@ function buildExpTable(exps){
       ${canDelete(t)?`<button class="btn-icon" onclick="deleteTransaction('${t.id}')" title="Supprimer">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
       </button>`:''}
-      ${t.isImmutable?`<span class="badge badge-teal text-xs">🔒 Validée</span>`:''}
+      ${t.isImmutable?`<span class="badge badge-teal text-xs">\u1F512 Valid\u00E9e</span>`:''}
     </div></td>
   </tr>`).join('')}
   </tbody></table></div>`;
 }
 function wfBadge(ws){
   const m={pending:'wf-pending',approved:'wf-approved',rejected:'wf-rejected'};
-  const l={pending:'⏳ Attente LCP',approved:'✓ Approuvé',rejected:'✗ Rejeté'};
+  const l={pending:'\u23F3 Attente LCP',approved:'\u2713 Approuv\u00E9',rejected:'\u2717 Rejet\u00E9'};
   return `<span class="wf-badge ${m[ws]||'wf-pending'}">${l[ws]||ws}</span>`;
 }
 function filterExpenses(){
@@ -933,7 +933,7 @@ function approveExp(id){
   const old={workflowStatus:t.workflowStatus};
   t.workflowStatus='approved';t.isImmutable=true;
   addLog('APPROVE_EXPENSE','transaction',id,old,{workflowStatus:'approved'});
-  persist();renderExpenses();updateSBCounts();toast('Dépense approuvée et verrouillée.','ok');
+  persist();renderExpenses();updateSBCounts();toast('D\u00E9pense approuv\u00E9e et verrouill\u00E9e.','ok');
 }
 function rejectExp(id){
   const t=DB.transactions.find(x=>x.id===id);
@@ -942,43 +942,43 @@ function rejectExp(id){
   const old={workflowStatus:t.workflowStatus};
   t.workflowStatus='rejected';t.rejectReason=reason||'';
   addLog('REJECT_EXPENSE','transaction',id,old,{workflowStatus:'rejected',reason});
-  persist();renderExpenses();updateSBCounts();toast('Dépense rejetée.','warn');
+  persist();renderExpenses();updateSBCounts();toast('D\u00E9pense rejet\u00E9e.','warn');
 }
 function markPaid(id){
   const t=DB.transactions.find(x=>x.id===id);if(!t)return;
   const old={status:t.status};
   t.status='paid';t.isImmutable=true;
   addLog('MARK_PAID','transaction',id,old,{status:'paid'});
-  persist();renderRevenue();renderDashboard&&renderDashboard();toast('Entrée marquée comme payée et verrouillée.','ok');
+  persist();renderRevenue();renderDashboard&&renderDashboard();toast('Entr\u00E9e marqu\u00E9e comme pay\u00E9e et verrouill\u00E9e.','ok');
 }
 function deleteTransaction(id){
   const t=DB.transactions.find(x=>x.id===id);if(!t)return;
-  if(!confirm('Supprimer cette transaction ? (Irréversible)'))return;
+  if(!confirm('Supprimer cette transaction ? (Irr\u00E9versible)'))return;
   DB.transactions=DB.transactions.filter(x=>x.id!==id);
   addLog('DELETE','transaction',id,t,null);
   persist();renderPage(document.querySelector('.sb-item.act')?.dataset?.pg||'dashboard');
-  updateSBCounts();toast('Transaction supprimée.','warn');
+  updateSBCounts();toast('Transaction supprim\u00E9e.','warn');
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // REVENUE MODAL (NEW / EDIT)
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function openRevModal(editId=null){
-  if(!isAdmin()){toast('Accès non autorisé.','err');return;}
+  if(!isAdmin()){toast('Acc\u00E8s non autoris\u00E9.','err');return;}
   const t=editId?DB.transactions.find(x=>x.id===editId):null;
   showModal('rev',`
-    <div class="modal-hdr"><h2>${t?'Modifier entrée':'Nouvelle entrée (Revenu)'}</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-hdr"><h2>${t?'Modifier entr\u00E9e':'Nouvelle entr\u00E9e (Revenu)'}</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="modal-body">
       <div class="fg-row3">
         <div class="fg"><label>Type de document <span class="req">*</span></label>
           <select id="m-doctype">
             <option value="facture" ${t?.docType==='facture'?'selected':''}>Facture</option>
-            <option value="recu" ${t?.docType==='recu'||!t?'selected':''}>Reçu de paiement</option>
+            <option value="recu" ${t?.docType==='recu'||!t?'selected':''}>Re\u00E7u de paiement</option>
             <option value="devis" ${t?.docType==='devis'?'selected':''}>Devis / Proforma</option>
           </select>
         </div>
         <div class="fg"><label>Date <span class="req">*</span></label><input type="date" id="m-date" value="${t?.date||today()}"/></div>
-        <div class="fg"><label>Échéance</label><input type="date" id="m-due" value="${t?.dueDate||''}"/></div>
+        <div class="fg"><label>\u00C9ch\u00E9ance</label><input type="date" id="m-due" value="${t?.dueDate||''}"/></div>
       </div>
       <div class="fg-row">
         <div class="fg"><label>Client / Organisation <span class="req">*</span></label><input id="m-client" placeholder="Nom du client ou EP" value="${t?.client||''}"/></div>
@@ -986,7 +986,7 @@ function openRevModal(editId=null){
       </div>
       <div class="fg-row">
         <div class="fg"><label>Email client</label><input type="email" id="m-cemail" placeholder="email@exemple.com" value="${t?.clientEmail||''}"/></div>
-        <div class="fg"><label>EXPA ID (échanges)</label><input id="m-expa" placeholder="ex: EP123456789" value="${t?.expaId||''}"/><span class="hint">Obligatoire pour les programmes d'échange</span></div>
+        <div class="fg"><label>EXPA ID (\u00E9changes)</label><input id="m-expa" placeholder="ex: EP123456789" value="${t?.expaId||''}"/><span class="hint">Obligatoire pour les programmes d'\u00E9change</span></div>
       </div>
       <div class="sec-div">Lignes / Prestations</div>
       <div id="m-lines">${buildLinesForms(t?.lines||[{code:'',desc:'',qty:1,pu:0}])}</div>
@@ -997,10 +997,10 @@ function openRevModal(editId=null){
         <div style="font-size:16px;font-weight:700;color:var(--blue);margin-top:6px;border-top:1.5px solid #B3D4FF;padding-top:6px">Total TTC : <span id="m-ttc">0 FCFA</span></div>
       </div>
       <div class="fg-row">
-        <div class="fg"><label>Département <span class="req">*</span></label>
+        <div class="fg"><label>D\u00E9partement <span class="req">*</span></label>
           <select id="m-dept">${DEPARTMENTS.map(d=>`<option value="${d}" ${t?.department===d?'selected':''}>${d}</option>`).join('')}</select>
         </div>
-        <div class="fg"><label>Motif / Catégorie <span class="req">*</span></label>
+        <div class="fg"><label>Motif / Cat\u00E9gorie <span class="req">*</span></label>
           <select id="m-motif">${MOTIFS_REVENUE.map(m=>`<option value="${m.code}" ${t?.motifCode===m.code?'selected':''}>${m.label}</option>`).join('')}</select>
         </div>
       </div>
@@ -1011,15 +1011,15 @@ function openRevModal(editId=null){
             <option value="momo-mtn" ${t?.payMode==='momo-mtn'?'selected':''}>Mobile Money MTN</option>
             <option value="momo-moov" ${t?.payMode==='momo-moov'?'selected':''}>Moov Money</option>
             <option value="virement" ${t?.payMode==='virement'?'selected':''}>Virement bancaire</option>
-            <option value="especes" ${t?.payMode==='especes'?'selected':''}>Espèces</option>
-            <option value="cheque" ${t?.payMode==='cheque'?'selected':''}>Chèque</option>
+            <option value="especes" ${t?.payMode==='especes'?'selected':''}>Esp\u00E8ces</option>
+            <option value="cheque" ${t?.payMode==='cheque'?'selected':''}>Ch\u00E8que</option>
           </select>
         </div>
         <div class="fg"><label>Statut paiement</label>
           <select id="m-status">
             <option value="pending" ${(!t||t.status==='pending')?'selected':''}>En attente</option>
             <option value="partial" ${t?.status==='partial'?'selected':''}>Partiel</option>
-            <option value="paid" ${t?.status==='paid'?'selected':''}>Payé</option>
+            <option value="paid" ${t?.status==='paid'?'selected':''}>Pay\u00E9</option>
           </select>
         </div>
       </div>
@@ -1081,41 +1081,41 @@ function saveRevenue(editId=''){
   const motifLabel=MOTIFS_REVENUE.find(m=>m.code===motifCode)?.label||motifCode;
   if(editId){
     const t=DB.transactions.find(x=>x.id===editId);if(!t)return;
-    if(t.isImmutable){toast('Transaction verrouillée, non modifiable.','err');return;}
+    if(t.isImmutable){toast('Transaction verrouill\u00E9e, non modifiable.','err');return;}
     const old={...t};
     Object.assign(t,{docType:doctype,date,dueDate:v('m-due'),client,clientIFU:v('m-ifu'),clientEmail:v('m-cemail'),expaId:v('m-expa'),lines,amount,department:dept,motifCode,motifLabel,payMode:v('m-pmode'),status:v('m-status'),notes:v('m-notes')});
     addLog('UPDATE','transaction',editId,old,t);
-    persist();closeModal();renderRevenue();toast('Entrée modifiée.','ok');
+    persist();closeModal();renderRevenue();toast('Entr\u00E9e modifi\u00E9e.','ok');
   }else{
     const tx={id:uid(),type:'revenue',docType:doctype,docNum:genDocNum(doctype),date,dueDate:v('m-due'),client,clientIFU:v('m-ifu'),clientEmail:v('m-cemail'),expaId:v('m-expa'),lines,amount,department:dept,motifCode,motifLabel,payMode:v('m-pmode'),status:v('m-status')!=='pending'?v('m-status'):'pending',notes:v('m-notes'),isImmutable:false,qrHash:genQRHash(uid()),createdBy:ME?.id,createdByName:ME?.fname+' '+ME?.lname,createdAt:nowStr()};
     if(tx.status==='paid')tx.isImmutable=true;
     DB.transactions.unshift(tx);
     addLog('CREATE','transaction',tx.id,null,tx);
-    persist();closeModal();renderRevenue();updateSBCounts();toast('Entrée enregistrée !','ok');
+    persist();closeModal();renderRevenue();updateSBCounts();toast('Entr\u00E9e enregistr\u00E9e !','ok');
   }
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // EXPENSE MODAL
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function openExpModal(editId=null){
-  if(!canCreate()){toast('Accès non autorisé.','err');return;}
+  if(!canCreate()){toast('Acc\u00E8s non autoris\u00E9.','err');return;}
   const t=editId?DB.transactions.find(x=>x.id===editId):null;
   const threshold=DB.cfg.validationThreshold;
   showModal('exp',`
-    <div class="modal-hdr"><h2>${t?'Modifier dépense':'Nouvelle dépense'}</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-hdr"><h2>${t?'Modifier d\u00E9pense':'Nouvelle d\u00E9pense'}</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="modal-body">
-      <div class="alert alert-info">Les dépenses ≥ ${fmtXOF(threshold)} nécessitent l'approbation du LCP avant d'être validées.</div>
+      <div class="alert alert-info">Les d\u00E9penses \u2265 ${fmtXOF(threshold)} n\u00E9cessitent l'approbation du LCP avant d'\u00EAtre valid\u00E9es.</div>
       <div class="fg-row">
         <div class="fg"><label>Date <span class="req">*</span></label><input type="date" id="e-date" value="${t?.date||today()}"/></div>
-        <div class="fg"><label>Fournisseur / Bénéficiaire</label><input id="e-supp" placeholder="Nom du fournisseur" value="${t?.supplier||''}"/></div>
+        <div class="fg"><label>Fournisseur / B\u00E9n\u00E9ficiaire</label><input id="e-supp" placeholder="Nom du fournisseur" value="${t?.supplier||''}"/></div>
       </div>
-      <div class="fg"><label>Description <span class="req">*</span></label><input id="e-desc" placeholder="Description détaillée de la dépense" value="${t?.description||''}"/></div>
+      <div class="fg"><label>Description <span class="req">*</span></label><input id="e-desc" placeholder="Description d\u00E9taill\u00E9e de la d\u00E9pense" value="${t?.description||''}"/></div>
       <div class="fg-row">
-        <div class="fg"><label>Catégorie <span class="req">*</span></label>
+        <div class="fg"><label>Cat\u00E9gorie <span class="req">*</span></label>
           <select id="e-motif">${MOTIFS_EXPENSE.map(m=>`<option value="${m.code}" ${t?.motifCode===m.code?'selected':''}>${m.label}</option>`).join('')}</select>
         </div>
-        <div class="fg"><label>Département <span class="req">*</span></label>
+        <div class="fg"><label>D\u00E9partement <span class="req">*</span></label>
           <select id="e-dept">${DEPARTMENTS.map(d=>`<option value="${d}" ${t?.department===d?'selected':''}>${d}</option>`).join('')}</select>
         </div>
       </div>
@@ -1124,15 +1124,15 @@ function openExpModal(editId=null){
         <div class="fg"><label>Mode de paiement</label>
           <select id="e-pmode">
             <option value="momo-mtn">Mobile Money MTN</option><option value="momo-moov">Moov Money</option>
-            <option value="especes">Espèces</option><option value="virement">Virement</option><option value="cheque">Chèque</option>
+            <option value="especes">Esp\u00E8ces</option><option value="virement">Virement</option><option value="cheque">Ch\u00E8que</option>
           </select>
         </div>
       </div>
       <div id="e-threshold-alert" class="hidden"></div>
-      <div class="fg"><label>Pièce jointe (facture fournisseur / reçu) <span class="req">*</span></label>
+      <div class="fg"><label>Pi\u00E8ce jointe (facture fournisseur / re\u00E7u) <span class="req">*</span></label>
         <div class="upload-zone ${t?.proofFile?'has-file':''}" onclick="triggerUpload('e-proof-input')" id="e-upload-zone">
           <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto;opacity:.4"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <p>Cliquez pour joindre la facture ou le reçu</p>
+          <p>Cliquez pour joindre la facture ou le re\u00E7u</p>
           <div class="file-name" id="e-proof-name">${t?.proofFile||''}</div>
         </div>
         <input type="file" id="e-proof-input" style="display:none" accept="image/*,.pdf" onchange="handleUpload('e-proof-input','e-proof-name','e-upload-zone')"/>
@@ -1147,7 +1147,7 @@ function openExpModal(editId=null){
 function checkExpThreshold(){
   const amt=parseInt(v('e-amount'))||0;const thr=DB.cfg.validationThreshold;
   const div=el('e-threshold-alert');
-  if(amt>=thr){div.className='alert alert-warn';div.textContent=`⚠ Montant ≥ ${fmtXOF(thr)} : approbation LCP requise.`;div.classList.remove('hidden');}
+  if(amt>=thr){div.className='alert alert-warn';div.textContent=`\u26A0 Montant \u2265 ${fmtXOF(thr)} : approbation LCP requise.`;div.classList.remove('hidden');}
   else div.classList.add('hidden');
 }
 function triggerUpload(inputId){document.getElementById(inputId)?.click();}
@@ -1171,46 +1171,46 @@ function saveExpense(editId=''){
     const old={...t};
     Object.assign(t,{date,supplier:v('e-supp'),description:desc,motifCode,motifLabel,department:dept,amount,payMode:v('e-pmode'),proofFile,notes:v('e-notes')});
     addLog('UPDATE','transaction',editId,old,t);
-    persist();closeModal();renderExpenses();toast('Dépense modifiée.','ok');
+    persist();closeModal();renderExpenses();toast('D\u00E9pense modifi\u00E9e.','ok');
   }else{
     const docNum=`DEP/${new Date().getFullYear()}/${String(DB.transactions.filter(t=>t.type==='expense').length+1).padStart(4,'0')}`;
     const tx={id:uid(),type:'expense',docNum,date,supplier:v('e-supp'),description:desc,motifCode,motifLabel,department:dept,amount,payMode:v('e-pmode'),proofFile,notes:v('e-notes'),workflowStatus:needsApproval?'pending':'approved',isImmutable:!needsApproval,createdBy:ME?.id,createdByName:ME?.fname+' '+ME?.lname,createdAt:nowStr()};
     DB.transactions.unshift(tx);
     addLog('CREATE','transaction',tx.id,null,tx);
     persist();closeModal();renderExpenses();updateSBCounts();
-    toast(needsApproval?'Dépense soumise pour approbation LCP.':'Dépense enregistrée et approuvée.','ok');
+    toast(needsApproval?'D\u00E9pense soumise pour approbation LCP.':'D\u00E9pense enregistr\u00E9e et approuv\u00E9e.','ok');
   }
 }
 function editTransaction(id){const t=DB.transactions.find(x=>x.id===id);if(t?.type==='revenue')openRevModal(id);else openExpModal(id);}
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // INVOICES PAGE
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderInvoices(){
   const docs=DB.transactions.filter(t=>t.type==='revenue').sort((a,b)=>b.date?.localeCompare(a.date));
   el('pg-invoices').innerHTML=`
     <div class="flex gap8" style="margin-bottom:16px;flex-wrap:wrap">
-      <input id="inv-search" placeholder="Rechercher N°, client…" oninput="filterInvoices()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
+      <input id="inv-search" placeholder="Rechercher N\u00B0, client\u2026" oninput="filterInvoices()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
       <select id="inv-type" onchange="filterInvoices()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
-        <option value="">Tous types</option><option value="facture">Factures</option><option value="recu">Reçus</option><option value="devis">Devis</option>
+        <option value="">Tous types</option><option value="facture">Factures</option><option value="recu">Re\u00E7us</option><option value="devis">Devis</option>
       </select>
     </div>
     <div id="inv-table-wrap">${buildInvTable(docs)}</div>`;
 }
 function buildInvTable(docs){
-  if(!docs.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg><p>Aucune facture émise.</p></div>`;
-  const typeMap={facture:'FACTURE',recu:'REÇU',devis:'DEVIS'};
-  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>Numéro</th><th>Type</th><th>Date</th><th>Client</th><th>EXPA ID</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead><tbody>
+  if(!docs.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg><p>Aucune facture \u00E9mise.</p></div>`;
+  const typeMap={facture:'FACTURE',recu:'RE\u00C7U',devis:'DEVIS'};
+  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>Num\u00E9ro</th><th>Type</th><th>Date</th><th>Client</th><th>EXPA ID</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead><tbody>
   ${docs.map(t=>`<tr>
-    <td class="doc-num">${t.docNum||'—'}</td>
-    <td><span class="badge badge-blue">${typeMap[t.docType]||'—'}</span></td>
+    <td class="doc-num">${t.docNum||'\u2014'}</td>
+    <td><span class="badge badge-blue">${typeMap[t.docType]||'\u2014'}</span></td>
     <td>${fmtDate(t.date)}</td>
-    <td>${t.client||'—'}</td>
-    <td>${t.expaId?`<code class="text-xs">${t.expaId}</code>`:'—'}</td>
+    <td>${t.client||'\u2014'}</td>
+    <td>${t.expaId?`<code class="text-xs">${t.expaId}</code>`:'\u2014'}</td>
     <td class="amount">${fmtXOF(t.amount)}</td>
     <td>${statusBadge(t)}</td>
     <td><div class="actions">
-      <button class="btn btn-xs btn-secondary" onclick="viewInvoice('${t.id}')">Aperçu</button>
+      <button class="btn btn-xs btn-secondary" onclick="viewInvoice('${t.id}')">Aper\u00E7u</button>
       <button class="btn btn-xs btn-primary" onclick="printInvoice('${t.id}')">PDF</button>
     </div></td>
   </tr>`).join('')}
@@ -1224,14 +1224,14 @@ function filterInvoices(){
   el('inv-table-wrap').innerHTML=buildInvTable(docs);
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // INVOICE VIEW / PRINT
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function buildInvoiceHTML(t){
   const cfg=DB.cfg;
-  const typeLabel={facture:'INVOICE / FACTURE',recu:'PAYMENT RECEIPT / REÇU',devis:'PROFORMA / DEVIS'};
+  const typeLabel={facture:'INVOICE / FACTURE',recu:'PAYMENT RECEIPT / RE\u00C7U',devis:'PROFORMA / DEVIS'};
   const rows=(t.lines||[]).map(l=>`<tr>
-    <td class="code">${l.code||'—'}</td>
+    <td class="code">${l.code||'\u2014'}</td>
     <td>${l.desc}</td>
     <td class="r">${fmtXOF(l.pu)}</td>
     <td style="text-align:center">${l.qty}</td>
@@ -1245,15 +1245,15 @@ function buildInvoiceHTML(t){
     cfg.bankName?`<div class="inv-pay-row"><span class="inv-pay-key">Banque</span><span class="inv-pay-val">${cfg.bankName}</span></div>`:'',
   ].filter(Boolean).join('');
   const statusClass=t.status==='paid'?'status-paid':t.status==='partial'?'status-partial':'status-pending';
-  const statusLabel=t.status==='paid'?'✓ PAYÉ':t.status==='partial'?'PARTIEL':'EN ATTENTE';
+  const statusLabel=t.status==='paid'?'\u2713 PAY\u00C9':t.status==='partial'?'PARTIEL':'EN ATTENTE';
   return `<div class="inv-wrap">
     <div class="inv-hdr">
       <div>
         <div class="inv-brand">AIESEC</div>
         <div style="font-size:13px;font-weight:600;opacity:.8;margin-top:2px">${cfg.org}</div>
         <div class="inv-org-info">
-          ${cfg.addr?`📍 ${cfg.addr}<br>`:''}
-          ${cfg.email?`✉ ${cfg.email}  `:''}${cfg.phone?`📞 ${cfg.phone}`:''}
+          ${cfg.addr?`\u1F4CD ${cfg.addr}<br>`:''}
+          ${cfg.email?`\u2709 ${cfg.email}  `:''}${cfg.phone?`\u1F4DE ${cfg.phone}`:''}
           ${cfg.ifu?`<br>IFU : ${cfg.ifu}`:''}
         </div>
       </div>
@@ -1261,27 +1261,27 @@ function buildInvoiceHTML(t){
         <div class="inv-type">${typeLabel[t.docType]||'DOCUMENT'}</div>
         <div class="inv-num">${t.docNum}</div>
         <div class="inv-date">${fmtDate(t.date)}</div>
-        ${t.dueDate?`<div class="inv-date">Échéance : ${fmtDate(t.dueDate)}</div>`:''}
+        ${t.dueDate?`<div class="inv-date">\u00C9ch\u00E9ance : ${fmtDate(t.dueDate)}</div>`:''}
       </div>
     </div>
     <div class="inv-body">
       <div style="display:grid;grid-template-columns:1fr auto;gap:16px;margin-bottom:16px">
         <div class="inv-to-box">
           <div class="inv-to-label">Destinataire / Invoice To</div>
-          <div class="inv-to-name">${t.client||'—'}</div>
+          <div class="inv-to-name">${t.client||'\u2014'}</div>
           <div class="inv-to-detail">
-            ${t.clientEmail?`✉ ${t.clientEmail}<br>`:''}
+            ${t.clientEmail?`\u2709 ${t.clientEmail}<br>`:''}
             ${t.clientIFU?`IFU : ${t.clientIFU}`:''}
             ${t.expaId?`<br>EXPA ID : <strong>${t.expaId}</strong>`:''}
           </div>
         </div>
         <div style="text-align:right;padding-top:4px">
           <div class="inv-status-stamp ${statusClass}">${statusLabel}</div>
-          ${t.expaId?`<div style="font-size:10px;color:var(--ink3);margin-top:6px">Programme d'échange</div>`:''}
+          ${t.expaId?`<div style="font-size:10px;color:var(--ink3);margin-top:6px">Programme d'\u00E9change</div>`:''}
         </div>
       </div>
       <table class="inv-table">
-        <thead><tr><th>Code</th><th>Description</th><th class="r">P.U. (FCFA)</th><th style="text-align:center">Qté</th><th class="r">Total (FCFA)</th></tr></thead>
+        <thead><tr><th>Code</th><th>Description</th><th class="r">P.U. (FCFA)</th><th style="text-align:center">Qt\u00E9</th><th class="r">Total (FCFA)</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
       <div class="inv-totals">
@@ -1295,25 +1295,25 @@ function buildInvoiceHTML(t){
       <div class="inv-sign">
         <div class="inv-sign-box">
           <div class="inv-sign-role">${cfg.finRole||'VP Finance & Legal'}</div>
-          <div class="inv-sign-name">${cfg.finName||ME?.fname+' '+ME?.lname||'—'}</div>
+          <div class="inv-sign-name">${cfg.finName||ME?.fname+' '+ME?.lname||'\u2014'}</div>
           ${cfg.finEmail?`<div class="inv-sign-contact">${cfg.finEmail}</div>`:''}
           ${cfg.finPhone?`<div class="inv-sign-contact">${cfg.finPhone}</div>`:''}
         </div>
         <div class="inv-sign-box">
-          <div class="inv-sign-role">Émis par</div>
-          <div class="inv-sign-name">${t.createdByName||'—'}</div>
+          <div class="inv-sign-role">\u00C9mis par</div>
+          <div class="inv-sign-name">${t.createdByName||'\u2014'}</div>
           <div class="inv-sign-contact">${cfg.term||''}</div>
         </div>
       </div>
       ${cfg.defaultNotes?`<div class="inv-notes"><div class="inv-notes-title">Notes</div><p>${t.notes||cfg.defaultNotes}</p></div>`:''}
       <div class="inv-qr">
         <div id="qr-${t.id}" style="display:inline-block"></div>
-        <p>Vérification : ${t.qrHash||'—'}</p>
+        <p>V\u00E9rification : ${t.qrHash||'\u2014'}</p>
       </div>
     </div>
     <div class="inv-footer">
-      <div class="inv-footer-org">${cfg.org} — ${cfg.addr||''}</div>
-      <div style="font-size:10px;color:var(--ink3)">Document généré par SGF-A • ${nowStr()}</div>
+      <div class="inv-footer-org">${cfg.org} \u2014 ${cfg.addr||''}</div>
+      <div style="font-size:10px;color:var(--ink3)">Document g\u00E9n\u00E9r\u00E9 par SGF-A \u2022 ${nowStr()}</div>
     </div>
   </div>`;
 }
@@ -1321,7 +1321,7 @@ function viewInvoice(id){
   const t=DB.transactions.find(x=>x.id===id);if(!t)return;
   showModal('view',`
     <div class="modal-hdr">
-      <h2>Aperçu — ${t.docNum}</h2>
+      <h2>Aper\u00E7u \u2014 ${t.docNum}</h2>
       <div class="flex gap8">
         <button class="btn btn-primary btn-sm" onclick="printInvoice('${id}')">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
@@ -1339,23 +1339,87 @@ function printInvoice(id){
   const t=DB.transactions.find(x=>x.id===id);if(!t)return;
   const w=window.open('','_blank','width=900,height=700');
   const html=buildInvoiceHTML(t);
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>${t.docNum}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  const PRINT_CSS=`
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
     body{font-family:'Inter',sans-serif;font-size:13px;color:#0D1B2A;background:#fff;}
     @page{size:A4 portrait;margin:0;}
-    ${document.querySelector('style').textContent}
-  </style></head><body>${html}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
-  <script>window.onload=function(){try{new QRCode(document.getElementById('qr-${id}'),{text:'SGF-A:${t.qrHash}:${t.docNum}',width:80,height:80,colorDark:'#037EF3',colorLight:'#fff'});}catch(e){}setTimeout(()=>window.print(),800);};<\/script>
-  </body></html>`);
+    .inv-wrap{font-family:'Inter',sans-serif;background:#fff;color:#0D1B2A;}
+    .inv-hdr{background:#037EF3!important;padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;color:#fff;}
+    .inv-brand{font-size:24px;font-weight:700;letter-spacing:2px;}
+    .inv-org-info{font-size:11px;opacity:.75;line-height:1.8;margin-top:6px;}
+    .inv-type-block{text-align:right;}
+    .inv-type{font-size:30px;font-weight:700;opacity:.92;letter-spacing:-1px;}
+    .inv-num{font-size:13px;font-weight:600;opacity:.8;margin-top:4px;}
+    .inv-date{font-size:11px;opacity:.55;margin-top:2px;}
+    .inv-body{padding:20px 28px;}
+    .inv-to-box{background:#EBF5FF!important;border-left:3px solid #037EF3;padding:12px 16px;margin-bottom:18px;}
+    .inv-to-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#037EF3;margin-bottom:4px;}
+    .inv-to-name{font-size:14px;font-weight:700;color:#037EF3;}
+    .inv-to-detail{font-size:11px;color:#455569;margin-top:3px;line-height:1.6;}
+    .inv-table{width:100%;border-collapse:collapse;margin:14px 0;}
+    .inv-table thead tr{background:#037EF3!important;}
+    .inv-table thead th{color:#fff!important;padding:8px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;}
+    .inv-table thead th.r{text-align:right;}
+    .inv-table tbody tr:nth-child(even){background:#F8FBFF!important;}
+    .inv-table tbody td{padding:10px;font-size:12px;border-bottom:1px solid #E2E8F0;}
+    .inv-table tbody td.r{text-align:right;font-weight:600;color:#037EF3;}
+    .inv-table tbody td.code{font-family:monospace;font-size:10px;color:#8898AA;}
+    .inv-totals{display:flex;justify-content:flex-end;margin-bottom:14px;}
+    .inv-totals-box{min-width:200px;}
+    .inv-trow{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:#455569;}
+    .inv-trow.grand{font-size:15px;font-weight:700;color:#037EF3;border-top:2px solid #037EF3;padding-top:7px;margin-top:4px;}
+    .inv-pay{background:#F4F7FB;border:1px solid #E2E8F0;border-radius:6px;padding:12px 14px;margin-bottom:14px;}
+    .inv-pay-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#037EF3;text-decoration:underline;margin-bottom:8px;}
+    .inv-pay-row{display:flex;gap:8px;font-size:11px;margin-bottom:4px;}
+    .inv-pay-key{font-weight:600;color:#037EF3;min-width:80px;}
+    .inv-pay-val{color:#455569;}
+    .inv-sign{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+    .inv-sign-box{border:1px solid #E2E8F0;border-radius:6px;padding:10px 14px;}
+    .inv-sign-role{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#037EF3;margin-bottom:4px;}
+    .inv-sign-name{font-size:13px;font-weight:600;}
+    .inv-sign-contact{font-size:10px;color:#8898AA;}
+    .inv-notes{background:#FFF9E0!important;border-left:3px solid #FFC845;padding:10px 12px;margin-bottom:14px;}
+    .inv-notes-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#8A6500;margin-bottom:4px;}
+    .inv-notes p{font-size:11px;color:#455569;line-height:1.6;}
+    .inv-footer{padding:10px 28px;background:#F4F7FB;border-top:1px solid #E2E8F0;display:flex;justify-content:space-between;align-items:center;}
+    .inv-footer-org{font-size:10px;color:#8898AA;}
+    .inv-status-stamp{font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;}
+    .status-paid{border:2px solid #00C16E;color:#00C16E;}
+    .status-pending{border:2px solid #F48924;color:#F48924;}
+    .status-partial{border:2px solid #037EF3;color:#037EF3;}
+    .inv-qr{text-align:center;margin:8px 0;}
+    .inv-qr p{font-size:10px;color:#8898AA;margin-top:4px;}
+    .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;}
+  `;
+  const docContent=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>${t.docNum}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>${PRINT_CSS}</style></head><body>${html}</body></html>`;
+  w.document.open();
+  w.document.write(docContent);
   w.document.close();
+  // Generate QR then print
+  setTimeout(()=>{
+    try{
+      const qrEl=w.document.getElementById('qr-'+id);
+      if(qrEl&&typeof w.QRCode==='undefined'){
+        // Load QR lib dynamically
+        const s=w.document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+        s.onload=()=>{
+          try{new w.QRCode(qrEl,{text:'SGF-A:'+t.qrHash+':'+t.docNum,width:80,height:80,colorDark:'#037EF3',colorLight:'#ffffff'});}catch(e){}
+          setTimeout(()=>w.print(),600);
+        };
+        w.document.head.appendChild(s);
+      }else{
+        setTimeout(()=>w.print(),600);
+      }
+    }catch(e){setTimeout(()=>w.print(),800);}
+  },400);
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // BUDGETS
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderBudgets(){
   const canEdit2=isAdmin();
   // Compute spent per dept
@@ -1363,9 +1427,9 @@ function renderBudgets(){
   DB.transactions.filter(t=>t.type==='expense'&&t.workflowStatus!=='rejected').forEach(t=>{spent[t.department]=(spent[t.department]||0)+t.amount;});
   el('pg-budgets').innerHTML=`
     <div class="flex gap8" style="margin-bottom:16px">
-      <h3 style="font-size:15px;font-weight:600">Budgets — ${DB.cfg.term}</h3>
+      <h3 style="font-size:15px;font-weight:600">Budgets \u2014 ${DB.cfg.term}</h3>
       <div class="ml-auto">
-        ${canEdit2?`<button class="btn btn-primary btn-sm" onclick="openBudgetModal()">Définir/modifier un budget</button>`:''}
+        ${canEdit2?`<button class="btn btn-primary btn-sm" onclick="openBudgetModal()">D\u00E9finir/modifier un budget</button>`:''}
       </div>
     </div>
     ${DEPARTMENTS.map(dept=>{
@@ -1378,30 +1442,30 @@ function renderBudgets(){
       return `<div class="dept-budget-row">
         <div class="dept-name">
           <span><span class="badge badge-${DEPT_COLORS[dept]||'gray'}">${dept}</span></span>
-          <span class="text-sm text-muted">${alloc?`${pct}% utilisé`:canEdit2?'<em>Aucun budget défini</em>':'—'}</span>
+          <span class="text-sm text-muted">${alloc?`${pct}% utilis\u00E9`:canEdit2?'<em>Aucun budget d\u00E9fini</em>':'\u2014'}</span>
         </div>
         ${alloc?`<div class="prog-bar"><div class="prog-fill ${fillClass}" style="width:${pct}%"></div></div>`:
-        canEdit2?`<div style="font-size:12px;color:var(--ink3)">Cliquez sur "Définir un budget" pour configurer ce département.</div>`:''}
+        canEdit2?`<div style="font-size:12px;color:var(--ink3)">Cliquez sur "D\u00E9finir un budget" pour configurer ce d\u00E9partement.</div>`:''}
         <div class="dept-amounts">
           <span>Revenus : <strong>${fmtXOF(rev)}</strong></span>
-          <span>Dépenses : <strong>${fmtXOF(used)}</strong></span>
+          <span>D\u00E9penses : <strong>${fmtXOF(used)}</strong></span>
           ${alloc?`<span>Budget : <strong>${fmtXOF(alloc)}</strong></span><span style="color:${pct>=100?'var(--red)':pct>=80?'var(--orange)':'var(--green)'}">Restant : <strong>${fmtXOF(Math.max(alloc-used,0))}</strong></span>`:''}
         </div>
-        ${pct>=80&&alloc?`<div class="alert ${pct>=100?'alert-danger':'alert-warn'}" style="margin-top:6px">${pct>=100?`⚠ Budget dépassé de ${fmtXOF(used-alloc)}`:`⚠ Budget utilisé à ${pct}% — Alertez le VP F&L`}</div>`:''}
+        ${pct>=80&&alloc?`<div class="alert ${pct>=100?'alert-danger':'alert-warn'}" style="margin-top:6px">${pct>=100?`\u26A0 Budget d\u00E9pass\u00E9 de ${fmtXOF(used-alloc)}`:`\u26A0 Budget utilis\u00E9 \u00E0 ${pct}% \u2014 Alertez le VP F&L`}</div>`:''}
       </div>`;
     }).join('')}`;
 }
 function openBudgetModal(){
   showModal('budget',`
-    <div class="modal-hdr"><h2>Définir un budget départemental</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-hdr"><h2>D\u00E9finir un budget d\u00E9partemental</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="modal-body">
-      <div class="fg"><label>Département <span class="req">*</span></label>
+      <div class="fg"><label>D\u00E9partement <span class="req">*</span></label>
         <select id="b-dept">${DEPARTMENTS.map(d=>`<option>${d}</option>`).join('')}</select>
       </div>
-      <div class="fg"><label>Année de mandat</label>
+      <div class="fg"><label>Ann\u00E9e de mandat</label>
         <input type="number" id="b-year" value="${DB.cfg.mandateYear}" min="2020" max="2030"/>
       </div>
-      <div class="fg"><label>Enveloppe budgétaire (FCFA) <span class="req">*</span></label>
+      <div class="fg"><label>Enveloppe budg\u00E9taire (FCFA) <span class="req">*</span></label>
         <input type="number" id="b-amount" placeholder="ex: 100000" min="0" step="1000"/>
       </div>
       <div class="fg"><label>Notes</label><textarea id="b-notes" rows="2" placeholder="Optionnel"></textarea></div>
@@ -1417,17 +1481,17 @@ function saveBudget(){
   const existing=DB.budgets.find(b=>b.department===dept&&b.mandateYear===year);
   if(existing){const old={...existing};existing.allocated=amt;existing.notes=v('b-notes');addLog('UPDATE_BUDGET','budget',existing.id,old,existing);}
   else{const nb={id:uid(),department:dept,mandateYear:year,allocated:amt,notes:v('b-notes'),createdBy:ME?.id,createdAt:nowStr()};DB.budgets.push(nb);addLog('CREATE_BUDGET','budget',nb.id,null,nb);}
-  persist();closeModal();renderBudgets();toast('Budget enregistré.','ok');
+  persist();closeModal();renderBudgets();toast('Budget enregistr\u00E9.','ok');
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // AUDIT LOG
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderAudit(){
-  if(!isAdmin()&&!isLCP()){el('pg-audit').innerHTML=`<div class="card"><div class="alert alert-danger">Accès réservé aux administrateurs.</div></div>`;return;}
+  if(!isAdmin()&&!isLCP()){el('pg-audit').innerHTML=`<div class="card"><div class="alert alert-danger">Acc\u00E8s r\u00E9serv\u00E9 aux administrateurs.</div></div>`;return;}
   const logs=DB.auditLog.slice(0,200);
   const actionDotClass={CREATE:'create',UPDATE:'update',DELETE:'delete',APPROVE_EXPENSE:'validate',REJECT_EXPENSE:'reject',MARK_PAID:'validate',LOGIN:'update',LOGOUT:'update',LOGIN_FAIL:'delete'};
-  const actionLabel={CREATE:'Création',UPDATE:'Modification',DELETE:'Suppression',APPROVE_EXPENSE:'Approbation dépense',REJECT_EXPENSE:'Rejet dépense',MARK_PAID:'Marquage payé',CREATE_BUDGET:'Budget créé',UPDATE_BUDGET:'Budget modifié',LOGIN:'Connexion',LOGOUT:'Déconnexion',LOGIN_FAIL:'Tentative connexion échouée',REGISTER:'Inscription'};
+  const actionLabel={CREATE:'Cr\u00E9ation',UPDATE:'Modification',DELETE:'Suppression',APPROVE_EXPENSE:'Approbation d\u00E9pense',REJECT_EXPENSE:'Rejet d\u00E9pense',MARK_PAID:'Marquage pay\u00E9',CREATE_BUDGET:'Budget cr\u00E9\u00E9',UPDATE_BUDGET:'Budget modifi\u00E9',LOGIN:'Connexion',LOGOUT:'D\u00E9connexion',LOGIN_FAIL:'Tentative connexion \u00E9chou\u00E9e',REGISTER:'Inscription'};
   el('pg-audit').innerHTML=`
     <div class="flex gap8" style="margin-bottom:16px">
       <h3 style="font-size:15px;font-weight:600">Journal d'audit</h3>
@@ -1439,22 +1503,22 @@ function renderAudit(){
       ${logs.length?logs.map(l=>`<div class="log-entry">
         <div class="log-dot ${actionDotClass[l.action]||'update'}"></div>
         <div>
-          <div class="log-text"><strong>${l.userName||'?'}</strong> (${l.userRole||'?'}) — ${actionLabel[l.action]||l.action}${l.entityType?` [${l.entityType}]`:''}</div>
+          <div class="log-text"><strong>${l.userName||'?'}</strong> (${l.userRole||'?'}) \u2014 ${actionLabel[l.action]||l.action}${l.entityType?` [${l.entityType}]`:''}</div>
           ${l.newVal?.docNum?`<div class="text-sm text-muted">Document : ${l.newVal.docNum}</div>`:''}
-          ${l.newVal?.status?`<div class="text-sm text-muted">Statut → ${l.newVal.status}</div>`:''}
+          ${l.newVal?.status?`<div class="text-sm text-muted">Statut \u2192 ${l.newVal.status}</div>`:''}
           <div class="log-time">${l.ts}</div>
         </div>
-      </div>`).join(''):`<div class="empty-state"><p>Aucune entrée dans le journal.</p></div>`}
+      </div>`).join(''):`<div class="empty-state"><p>Aucune entr\u00E9e dans le journal.</p></div>`}
     </div>`;
 }
 function exportAuditLog(){
-  const rows=[['Date','Utilisateur','Rôle','Action','Type entité','ID entité','Détails'],...DB.auditLog.map(l=>[l.ts,l.userName,l.userRole,l.action,l.entityType||'',l.entityId||'',JSON.stringify(l.newVal||{}).substring(0,100)])];
+  const rows=[['Date','Utilisateur','R\u00F4le','Action','Type entit\u00E9','ID entit\u00E9','D\u00E9tails'],...DB.auditLog.map(l=>[l.ts,l.userName,l.userRole,l.action,l.entityType||'',l.entityId||'',JSON.stringify(l.newVal||{}).substring(0,100)])];
   downloadCSV(rows,`audit_log_${today()}.csv`);
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // REPORTS & EXPORT
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderReports(){
   const txs=DB.transactions;
   const totalRev=txs.filter(t=>t.type==='revenue').reduce((s,t)=>s+t.amount,0);
@@ -1464,38 +1528,38 @@ function renderReports(){
       <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports disponibles</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
         <div class="card card-sm" style="border:1.5px solid var(--blue-bg)">
-          <div style="font-size:13px;font-weight:600;margin-bottom:6px">📊 Export MC National</div>
-          <p class="text-sm text-muted" style="margin-bottom:10px">Format CSV pour le rapport au Comité National AIESEC Bénin.</p>
-          <button class="btn btn-primary btn-sm w100" onclick="exportMCNational()">Télécharger CSV</button>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">\u1F4CA Export MC National</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Format CSV pour le rapport au Comit\u00E9 National AIESEC B\u00E9nin.</p>
+          <button class="btn btn-primary btn-sm w100" onclick="exportMCNational()">T\u00E9l\u00E9charger CSV</button>
         </div>
         <div class="card card-sm" style="border:1.5px solid var(--green-bg)">
-          <div style="font-size:13px;font-weight:600;margin-bottom:6px">📥 Export Revenus complet</div>
-          <p class="text-sm text-muted" style="margin-bottom:10px">Toutes les entrées avec statuts et détails.</p>
-          <button class="btn btn-secondary btn-sm w100" onclick="exportRevCSV()">Télécharger CSV</button>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">\u1F4E5 Export Revenus complet</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Toutes les entr\u00E9es avec statuts et d\u00E9tails.</p>
+          <button class="btn btn-secondary btn-sm w100" onclick="exportRevCSV()">T\u00E9l\u00E9charger CSV</button>
         </div>
         <div class="card card-sm" style="border:1.5px solid var(--orange-bg)">
-          <div style="font-size:13px;font-weight:600;margin-bottom:6px">📤 Export Dépenses complet</div>
-          <p class="text-sm text-muted" style="margin-bottom:10px">Toutes les dépenses avec workflow de validation.</p>
-          <button class="btn btn-secondary btn-sm w100" onclick="exportExpCSV()">Télécharger CSV</button>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">\u1F4E4 Export D\u00E9penses complet</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Toutes les d\u00E9penses avec workflow de validation.</p>
+          <button class="btn btn-secondary btn-sm w100" onclick="exportExpCSV()">T\u00E9l\u00E9charger CSV</button>
         </div>
         <div class="card card-sm" style="border:1.5px solid var(--teal-bg)">
-          <div style="font-size:13px;font-weight:600;margin-bottom:6px">💾 Sauvegarde complète (JSON)</div>
-          <p class="text-sm text-muted" style="margin-bottom:10px">Exportez toutes les données pour sauvegarde.</p>
-          <button class="btn btn-secondary btn-sm w100" onclick="exportJSON()">Télécharger JSON</button>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">\u1F4BE Sauvegarde compl\u00E8te (JSON)</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Exportez toutes les donn\u00E9es pour sauvegarde.</p>
+          <button class="btn btn-secondary btn-sm w100" onclick="exportJSON()">T\u00E9l\u00E9charger JSON</button>
         </div>
         <div class="card card-sm" style="border:1.5px solid var(--purple-bg)">
-          <div style="font-size:13px;font-weight:600;margin-bottom:6px">📤 Importer données</div>
-          <p class="text-sm text-muted" style="margin-bottom:10px">Restaurez à partir d'une sauvegarde JSON.</p>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">\u1F4E4 Importer donn\u00E9es</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Restaurez \u00E0 partir d'une sauvegarde JSON.</p>
           <button class="btn btn-secondary btn-sm w100" onclick="document.getElementById('imp-file').click()">Importer JSON</button>
           <input type="file" id="imp-file" accept=".json" style="display:none" onchange="importJSON(this)"/>
         </div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Résumé financier — ${DB.cfg.term}</div>
+      <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>R\u00E9sum\u00E9 financier \u2014 ${DB.cfg.term}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
         <div><div class="text-xs text-muted" style="margin-bottom:4px">Total revenus</div><div style="font-size:22px;font-weight:700;color:var(--blue)">${fmtXOF(totalRev)}</div></div>
-        <div><div class="text-xs text-muted" style="margin-bottom:4px">Total dépenses</div><div style="font-size:22px;font-weight:700;color:var(--red)">${fmtXOF(totalExp)}</div></div>
+        <div><div class="text-xs text-muted" style="margin-bottom:4px">Total d\u00E9penses</div><div style="font-size:22px;font-weight:700;color:var(--red)">${fmtXOF(totalExp)}</div></div>
         <div><div class="text-xs text-muted" style="margin-bottom:4px">Balance nette</div><div style="font-size:22px;font-weight:700;color:${totalRev-totalExp>=0?'var(--green)':'var(--red)'}">${fmtXOF(totalRev-totalExp)}</div></div>
       </div>
       <div style="margin-top:14px">
@@ -1513,22 +1577,22 @@ function renderReports(){
     </div>`;
 }
 function exportMCNational(){
-  const rows=[['N° Document','Type','Date','Département','Motif Code','Motif Libellé','Client/Fournisseur','EXPA ID','Montant XOF','Statut','Mode Paiement','Workflow','Terme','Créé par'],...DB.transactions.map(t=>[t.docNum||'',t.type==='revenue'?'Entrée':'Sortie',t.date||'',t.department||'',t.motifCode||'',t.motifLabel||'',t.client||t.supplier||t.description||'',t.expaId||'',t.amount||0,t.type==='revenue'?t.status:t.workflowStatus,t.payMode||'',t.workflowStatus||'',DB.cfg.term,t.createdByName||''])];
+  const rows=[['N\u00B0 Document','Type','Date','D\u00E9partement','Motif Code','Motif Libell\u00E9','Client/Fournisseur','EXPA ID','Montant XOF','Statut','Mode Paiement','Workflow','Terme','Cr\u00E9\u00E9 par'],...DB.transactions.map(t=>[t.docNum||'',t.type==='revenue'?'Entr\u00E9e':'Sortie',t.date||'',t.department||'',t.motifCode||'',t.motifLabel||'',t.client||t.supplier||t.description||'',t.expaId||'',t.amount||0,t.type==='revenue'?t.status:t.workflowStatus,t.payMode||'',t.workflowStatus||'',DB.cfg.term,t.createdByName||''])];
   downloadCSV(rows,`MC_Report_${DB.cfg.lc.replace(/\s/g,'_')}_${today()}.csv`);
-  toast('Export MC National téléchargé.','ok');
+  toast('Export MC National t\u00E9l\u00E9charg\u00E9.','ok');
 }
 function exportRevCSV(){
-  const rows=[['N°','Date','Échéance','Type','Client','Email','IFU','EXPA ID','Motif','Département','Montant FCFA','Statut','Mode paiement','Terme','Créé par'],...DB.transactions.filter(t=>t.type==='revenue').map(t=>[t.docNum||'',t.date||'',t.dueDate||'',t.docType||'',t.client||'',t.clientEmail||'',t.clientIFU||'',t.expaId||'',t.motifLabel||'',t.department||'',t.amount||0,t.status||'',t.payMode||'',t.term||DB.cfg.term,t.createdByName||''])];
-  downloadCSV(rows,`Revenus_${today()}.csv`);toast('Export revenus téléchargé.','ok');
+  const rows=[['N\u00B0','Date','\u00C9ch\u00E9ance','Type','Client','Email','IFU','EXPA ID','Motif','D\u00E9partement','Montant FCFA','Statut','Mode paiement','Terme','Cr\u00E9\u00E9 par'],...DB.transactions.filter(t=>t.type==='revenue').map(t=>[t.docNum||'',t.date||'',t.dueDate||'',t.docType||'',t.client||'',t.clientEmail||'',t.clientIFU||'',t.expaId||'',t.motifLabel||'',t.department||'',t.amount||0,t.status||'',t.payMode||'',t.term||DB.cfg.term,t.createdByName||''])];
+  downloadCSV(rows,`Revenus_${today()}.csv`);toast('Export revenus t\u00E9l\u00E9charg\u00E9.','ok');
 }
 function exportExpCSV(){
-  const rows=[['N°','Date','Description','Catégorie','Département','Montant FCFA','Fournisseur','Pièce jointe','Workflow','Motif rejet','Terme','Créé par'],...DB.transactions.filter(t=>t.type==='expense').map(t=>[t.docNum||'',t.date||'',t.description||'',t.motifLabel||'',t.department||'',t.amount||0,t.supplier||'',t.proofFile||'',t.workflowStatus||'',t.rejectReason||'',DB.cfg.term,t.createdByName||''])];
-  downloadCSV(rows,`Depenses_${today()}.csv`);toast('Export dépenses téléchargé.','ok');
+  const rows=[['N\u00B0','Date','Description','Cat\u00E9gorie','D\u00E9partement','Montant FCFA','Fournisseur','Pi\u00E8ce jointe','Workflow','Motif rejet','Terme','Cr\u00E9\u00E9 par'],...DB.transactions.filter(t=>t.type==='expense').map(t=>[t.docNum||'',t.date||'',t.description||'',t.motifLabel||'',t.department||'',t.amount||0,t.supplier||'',t.proofFile||'',t.workflowStatus||'',t.rejectReason||'',DB.cfg.term,t.createdByName||''])];
+  downloadCSV(rows,`Depenses_${today()}.csv`);toast('Export d\u00E9penses t\u00E9l\u00E9charg\u00E9.','ok');
 }
 function exportJSON(){
   const b=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`SGF-A_Backup_${today()}.json`;a.click();
-  toast('Sauvegarde exportée.','ok');
+  toast('Sauvegarde export\u00E9e.','ok');
 }
 function importJSON(input){
   const f=input.files[0];if(!f)return;
@@ -1543,7 +1607,7 @@ function importJSON(input){
       if(p.cfg){DB.cfg={...DEFAULT_CFG,...p.cfg};}
       if(p.invoiceSeq){DB.invoiceSeq=p.invoiceSeq;}
       persist();updateSidebar();renderReports();
-      toast('Données importées avec succès !','ok');
+      toast('Donn\u00E9es import\u00E9es avec succ\u00E8s !','ok');
     }catch(x){toast('Fichier invalide.','err');}
   };r.readAsText(f);
 }
@@ -1552,64 +1616,64 @@ function downloadCSV(rows,name){
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));a.download=name;a.click();
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // SETTINGS
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderSettings(){
-  if(!isAdmin()){el('pg-settings').innerHTML=`<div class="alert alert-danger">Accès réservé au VP Finance & Legal.</div>`;return;}
+  if(!isAdmin()){el('pg-settings').innerHTML=`<div class="alert alert-danger">Acc\u00E8s r\u00E9serv\u00E9 au VP Finance & Legal.</div>`;return;}
   const c=DB.cfg;
   el('pg-settings').innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div class="card">
         <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Organisation</div>
         <div class="fg"><label>Nom de l'organisation</label><input id="s-org" value="${c.org}"/></div>
-        <div class="fg"><label>Comité Local (LC)</label><input id="s-lc" value="${c.lc}"/></div>
+        <div class="fg"><label>Comit\u00E9 Local (LC)</label><input id="s-lc" value="${c.lc}"/></div>
         <div class="fg"><label>Terme / Mandat</label><input id="s-term" value="${c.term}"/></div>
         <div class="fg-row">
-          <div class="fg"><label>Année de mandat</label><input type="number" id="s-myear" value="${c.mandateYear}"/></div>
+          <div class="fg"><label>Ann\u00E9e de mandat</label><input type="number" id="s-myear" value="${c.mandateYear}"/></div>
           <div class="fg"><label>IFU</label><input id="s-ifu" value="${c.ifu}" placeholder="Identifiant Fiscal Unique"/></div>
         </div>
         <div class="fg"><label>Email officiel</label><input type="email" id="s-email" value="${c.email}"/></div>
-        <div class="fg"><label>Téléphone</label><input id="s-phone" value="${c.phone}"/></div>
+        <div class="fg"><label>T\u00E9l\u00E9phone</label><input id="s-phone" value="${c.phone}"/></div>
         <div class="fg"><label>Adresse</label><textarea id="s-addr" rows="2">${c.addr}</textarea></div>
       </div>
       <div class="card">
         <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Paiement &amp; Facturation</div>
-        <div class="fg"><label>MTN MoMo (numéro officiel)</label><input id="s-mtn" value="${c.momoMTN}" placeholder="01 90 19 28 10"/></div>
-        <div class="fg"><label>Moov Money (numéro officiel)</label><input id="s-moov" value="${c.momoMoov}" placeholder=""/></div>
+        <div class="fg"><label>MTN MoMo (num\u00E9ro officiel)</label><input id="s-mtn" value="${c.momoMTN}" placeholder="01 90 19 28 10"/></div>
+        <div class="fg"><label>Moov Money (num\u00E9ro officiel)</label><input id="s-moov" value="${c.momoMoov}" placeholder=""/></div>
         <div class="fg"><label>Banque</label><input id="s-bank" value="${c.bankName}"/></div>
-        <div class="fg"><label>N° Compte bancaire</label><input id="s-baccount" value="${c.bankAccount}"/></div>
+        <div class="fg"><label>N\u00B0 Compte bancaire</label><input id="s-baccount" value="${c.bankAccount}"/></div>
         <div class="fg"><label>Titulaire du compte</label><input id="s-bholder" value="${c.bankHolder}"/></div>
         <div class="fg-row3">
-          <div class="fg"><label>Préfixe Facture</label><input id="s-pfac" value="${c.prefixFac}"/></div>
-          <div class="fg"><label>Préfixe Reçu</label><input id="s-prec" value="${c.prefixRec}"/></div>
-          <div class="fg"><label>Préfixe Devis</label><input id="s-pdev" value="${c.prefixDev||'DEV'}"/></div>
+          <div class="fg"><label>Pr\u00E9fixe Facture</label><input id="s-pfac" value="${c.prefixFac}"/></div>
+          <div class="fg"><label>Pr\u00E9fixe Re\u00E7u</label><input id="s-prec" value="${c.prefixRec}"/></div>
+          <div class="fg"><label>Pr\u00E9fixe Devis</label><input id="s-pdev" value="${c.prefixDev||'DEV'}"/></div>
         </div>
       </div>
       <div class="card">
         <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Responsable Finance</div>
         <div class="fg"><label>Nom complet</label><input id="s-finname" value="${c.finName}"/></div>
-        <div class="fg"><label>Titre / Rôle</label><input id="s-finrole" value="${c.finRole}"/></div>
+        <div class="fg"><label>Titre / R\u00F4le</label><input id="s-finrole" value="${c.finRole}"/></div>
         <div class="fg"><label>Email</label><input type="email" id="s-finemail" value="${c.finEmail}"/></div>
-        <div class="fg"><label>Téléphone</label><input id="s-finphone" value="${c.finPhone}"/></div>
+        <div class="fg"><label>T\u00E9l\u00E9phone</label><input id="s-finphone" value="${c.finPhone}"/></div>
         <div class="fg"><label>Note standard (bas de factures)</label><textarea id="s-notes" rows="3">${c.defaultNotes}</textarea></div>
       </div>
       <div class="card">
-        <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Sécurité &amp; Accès</div>
-        <div class="fg"><label>Code d'accès (inscription VP F&L / LCP)</label><input type="password" id="s-acode" placeholder="Laisser vide pour ne pas modifier" autocomplete="new-password"/></div>
-        <div class="fg"><label>Seuil validation LCP (FCFA)</label><input type="number" id="s-thresh" value="${c.validationThreshold}" min="0" step="1000"/><span class="hint">Dépenses ≥ ce montant nécessitent l'approbation du LCP</span></div>
+        <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>S\u00E9curit\u00E9 &amp; Acc\u00E8s</div>
+        <div class="fg"><label>Code d'acc\u00E8s (inscription VP F&L / LCP)</label><input type="password" id="s-acode" placeholder="Laisser vide pour ne pas modifier" autocomplete="new-password"/></div>
+        <div class="fg"><label>Seuil validation LCP (FCFA)</label><input type="number" id="s-thresh" value="${c.validationThreshold}" min="0" step="1000"/><span class="hint">D\u00E9penses \u2265 ce montant n\u00E9cessitent l'approbation du LCP</span></div>
         <div style="margin-top:16px">
-          <div class="sec-div">Utilisateurs enregistrés</div>
+          <div class="sec-div">Utilisateurs enregistr\u00E9s</div>
           ${DB.users.map(u=>`<div class="flex gap8" style="padding:7px 0;border-bottom:1px solid var(--line)">
             <div class="sb-av" style="width:28px;height:28px;font-size:10px;background:${u.role==='vpfl'?'var(--blue)':u.role==='lcp'?'var(--teal)':'var(--gray)'}">${(u.fname[0]+u.lname[0]).toUpperCase()}</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:500">${u.fname} ${u.lname}</div><div class="text-xs text-muted">@${u.username} — ${{vpfl:'VP F&L',lcp:'LCP',vpd:'VP Dept '+u.dept}[u.role]||u.role}</div></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:500">${u.fname} ${u.lname}</div><div class="text-xs text-muted">@${u.username} \u2014 ${{vpfl:'VP F&L',lcp:'LCP',vpd:'VP Dept '+u.dept}[u.role]||u.role}</div></div>
             ${u.id!=='u0'&&isAdmin()?`<button class="btn btn-xs" onclick="deleteUser('${u.id}')" style="background:var(--red-bg);color:var(--red);border:none">Suppr.</button>`:''}
           </div>`).join('')}
         </div>
       </div>
     </div>
     <div style="margin-top:14px;display:flex;justify-content:flex-end">
-      <button class="btn btn-primary" onclick="saveSettings()">Sauvegarder les paramètres</button>
+      <button class="btn btn-primary" onclick="saveSettings()">Sauvegarder les param\u00E8tres</button>
     </div>`;
 }
 function saveSettings(){
@@ -1625,18 +1689,18 @@ function saveSettings(){
   c.validationThreshold=parseInt(v('s-thresh'))||c.validationThreshold;
   const nc=v('s-acode');if(nc.length>=4)c.accessCode=nc;
   addLog('UPDATE_SETTINGS','config',null,null,{updatedAt:nowStr()});
-  persist();updateSidebar();renderSettings();toast('Paramètres sauvegardés !','ok');
+  persist();updateSidebar();renderSettings();toast('Param\u00E8tres sauvegard\u00E9s !','ok');
 }
 function deleteUser(id){
   if(!confirm('Supprimer cet utilisateur ?'))return;
   DB.users=DB.users.filter(u=>u.id!==id);
   addLog('DELETE_USER','user',id,null,null);
-  persist();renderSettings();toast('Utilisateur supprimé.','warn');
+  persist();renderSettings();toast('Utilisateur supprim\u00E9.','warn');
 }
 
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // INIT
-// ══════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function init(){
   loadDB();
   // Check session
