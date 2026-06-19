@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SGF-A — Gestion Financière AIESEC</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & TOKENS ─────────────────────────────────── */
+:root{
+  --blue:#037EF3;--blue-d:#0056B3;--blue-bg:#EBF5FF;
+  --teal:#0CB9C1;--teal-bg:#E0F9FA;
+  --green:#00C16E;--green-bg:#E0FAF0;
+  --orange:#F48924;--orange-bg:#FFF3E0;
+  --red:#E53935;--red-bg:#FFEBEE;
+  --purple:#7552CC;--purple-bg:#F3EEFF;
+  --yellow:#FFC845;--yellow-bg:#FFF9E0;
+  --gray:#52565E;
+  --ink:#0D1B2A;--ink2:#455569;--ink3:#8898AA;
+  --line:#E2E8F0;--line2:#CBD5E1;
+  --surface:#F4F7FB;--white:#FFFFFF;
+  --r:8px;--r2:12px;--r3:16px;
+  --sh:0 1px 4px rgba(0,0,0,.08);
+  --sh2:0 4px 20px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink);font-size:14px;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+input,select,textarea,button{font-family:inherit;font-size:14px;}
+code{font-family:'JetBrains Mono',monospace;font-size:12px;}
+
+/* ── UTILS ──────────────────────────────────────────── */
+.hidden{display:none!important;}
+.flex{display:flex;align-items:center;}
+.gap4{gap:4px;} .gap8{gap:8px;} .gap12{gap:12px;} .gap16{gap:16px;}
+.ml-auto{margin-left:auto;}
+.text-muted{color:var(--ink3);}
+.text-sm{font-size:12px;}
+.text-xs{font-size:11px;}
+.fw500{font-weight:500;} .fw600{font-weight:600;} .fw700{font-weight:700;}
+.w100{width:100%;}
+
+/* ── BADGE ──────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.badge-blue{background:var(--blue-bg);color:#0056B3;}
+.badge-green{background:var(--green-bg);color:#00814A;}
+.badge-orange{background:var(--orange-bg);color:#B05A00;}
+.badge-red{background:var(--red-bg);color:#B71C1C;}
+.badge-teal{background:var(--teal-bg);color:#007880;}
+.badge-purple{background:var(--purple-bg);color:#4A2C9E;}
+.badge-gray{background:#F1F3F5;color:var(--ink3);}
+.badge-yellow{background:var(--yellow-bg);color:#8A6500;}
+
+/* ── BUTTONS ────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;}
+.btn-primary{background:var(--blue);color:#fff;}.btn-primary:hover{background:var(--blue-d);}
+.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line2);}.btn-secondary:hover{background:var(--surface);}
+.btn-danger{background:var(--red);color:#fff;}.btn-danger:hover{opacity:.88;}
+.btn-ghost{background:transparent;color:var(--ink2);}.btn-ghost:hover{background:var(--surface);}
+.btn-sm{padding:5px 12px;font-size:12px;}
+.btn-xs{padding:3px 8px;font-size:11px;}
+.btn-icon{padding:6px;border-radius:var(--r);background:transparent;border:none;cursor:pointer;color:var(--ink3);display:inline-flex;align-items:center;justify-content:center;}.btn-icon:hover{background:var(--surface);color:var(--ink);}
+
+/* ── FORM ───────────────────────────────────────────── */
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;}
+.fg label{font-size:12px;font-weight:600;color:var(--ink2);letter-spacing:.3px;}
+.fg label .req{color:var(--red);margin-left:2px;}
+.fg input,.fg select,.fg textarea{padding:9px 12px;border:1.5px solid var(--line2);border-radius:var(--r);color:var(--ink);background:#fff;transition:border .15s;outline:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue);}
+.fg textarea{resize:vertical;min-height:72px;}
+.fg .hint{font-size:11px;color:var(--ink3);}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.fg-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.input-err{border-color:var(--red)!important;}
+.err-msg{font-size:11px;color:var(--red);margin-top:2px;}
+
+/* ── CARD ───────────────────────────────────────────── */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:20px;}
+.card-sm{padding:14px 16px;}
+.card-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title svg{width:18px;height:18px;flex-shrink:0;}
+
+/* ── STAT CARD ──────────────────────────────────────── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:16px 20px;}
+.stat-card .slabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3);margin-bottom:8px;}
+.stat-card .sval{font-size:24px;font-weight:700;letter-spacing:-.5px;}
+.stat-card .ssub{font-size:12px;color:var(--ink3);margin-top:3px;}
+.stat-card.blue .sval{color:var(--blue);} .stat-card.green .sval{color:var(--green);}
+.stat-card.red .sval{color:var(--red);} .stat-card.orange .sval{color:var(--orange);}
+.stat-card.teal .sval{color:var(--teal);}
+
+/* ── TABLE ──────────────────────────────────────────── */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r2);}
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table thead tr{background:var(--surface);}
+.data-table th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--line);white-space:nowrap;}
+.data-table td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tbody tr:hover{background:#FAFBFF;}
+.data-table .amount{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:13px;white-space:nowrap;}
+.data-table .doc-num{font-weight:600;color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:12px;}
+.data-table .actions{display:flex;gap:4px;align-items:center;}
+.empty-state{text-align:center;padding:48px 20px;color:var(--ink3);}
+.empty-state svg{width:48px;height:48px;opacity:.25;margin:0 auto 12px;display:block;}
+.empty-state p{font-size:14px;}
+
+/* ── MODAL ──────────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,20,40,.5);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;backdrop-filter:blur(2px);}
+.modal{background:#fff;border-radius:var(--r3);width:100%;max-width:680px;max-height:88vh;overflow-y:auto;box-shadow:var(--sh2);}
+.modal-lg{max-width:860px;}
+.modal-hdr{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:2;padding-bottom:14px;border-bottom:1px solid var(--line);}
+.modal-hdr h2{font-size:16px;font-weight:600;}
+.modal-body{padding:20px 24px;}
+.modal-foot{padding:0 24px 20px;display:flex;gap:8px;justify-content:flex-end;}
+
+/* ── SIDEBAR ────────────────────────────────────────── */
+.app-layout{display:flex;min-height:100vh;}
+.sidebar{width:220px;background:#0D1B2A;display:flex;flex-direction:column;position:fixed;height:100vh;top:0;left:0;z-index:100;overflow-y:auto;transition:transform .3s;}
+.sb-logo{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;}
+.sb-logo-mark{width:32px;height:32px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0;}
+.sb-logo-txt .org{font-size:12px;font-weight:600;color:#fff;}
+.sb-logo-txt .lc{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;}
+.sb-term{margin:8px 12px;background:var(--teal);color:#fff;font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px;display:inline-block;}
+.sb-sec{padding:12px 14px 4px;font-size:9px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:1.8px;text-transform:uppercase;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 12px;margin:1px 8px;border-radius:var(--r);cursor:pointer;font-size:12.5px;color:rgba(255,255,255,.55);transition:all .15s;}
+.sb-item svg{width:16px;height:16px;flex-shrink:0;}
+.sb-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.sb-item.act{background:var(--blue);color:#fff;font-weight:500;}
+.sb-item .badge{margin-left:auto;}
+.sb-bot{margin-top:auto;padding:12px;border-top:1px solid rgba(255,255,255,.08);}
+.sb-user{display:flex;align-items:center;gap:9px;}
+.sb-av{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.sb-uname{font-size:12px;font-weight:500;color:rgba(255,255,255,.8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:110px;}
+.sb-urole{font-size:10px;color:rgba(255,255,255,.35);}
+
+/* ── TOPBAR ─────────────────────────────────────────── */
+.main-area{margin-left:220px;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:#fff;border-bottom:1px solid var(--line);padding:0 24px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-title{font-size:15px;font-weight:600;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--ink2);}
+
+/* ── CONTENT PAGES ──────────────────────────────────── */
+.content{padding:24px;flex:1;}
+.pg{display:none;animation:pgIn .2s ease;}
+.pg.act{display:block;}
+@keyframes pgIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── PROGRESS BAR ───────────────────────────────────── */
+.prog-bar{height:8px;background:#F1F3F5;border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;transition:width .4s;}
+.prog-fill.ok{background:var(--green);}
+.prog-fill.warn{background:var(--orange);}
+.prog-fill.over{background:var(--red);}
+
+/* ── TOAST ──────────────────────────────────────────── */
+#toast-container{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;}
+.toast{background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--r);font-size:13px;animation:toastIn .2s ease;max-width:320px;}
+.toast.ok{background:#1B5E20;}
+.toast.err{background:#B71C1C;}
+.toast.warn{background:#E65100;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── ALERT BOX ──────────────────────────────────────── */
+.alert{border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:14px;}
+.alert-warn{background:var(--orange-bg);border-left:3px solid var(--orange);color:#7A3D00;}
+.alert-info{background:var(--blue-bg);border-left:3px solid var(--blue);color:#003878;}
+.alert-danger{background:var(--red-bg);border-left:3px solid var(--red);color:#7F0000;}
+.alert-success{background:var(--green-bg);border-left:3px solid var(--green);color:#004D2E;}
+
+/* ── TABS ───────────────────────────────────────────── */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:20px;}
+.tab-btn{padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.tab-btn.act{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-content{display:none;}.tab-content.act{display:block;}
+
+/* ── SECTION DIVIDER ────────────────────────────────── */
+.sec-div{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);}
+
+/* ── AUTH SCREEN ────────────────────────────────────── */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#061828 0%,#0D2A4A 50%,#0A3A6A 100%);padding:20px;}
+.auth-card{background:#fff;border-radius:20px;width:100%;max-width:420px;overflow:hidden;box-shadow:var(--sh2);}
+.auth-hdr{background:linear-gradient(135deg,#061828,#037EF3 80%,#0CB9C1);padding:30px 28px 24px;text-align:center;}
+.auth-hdr .brand{font-size:28px;font-weight:700;color:#fff;letter-spacing:2px;font-family:'Inter',sans-serif;}
+.auth-hdr .subtitle{font-size:12px;color:rgba(255,255,255,.6);margin-top:4px;}
+.auth-hdr .sys-name{font-size:14px;font-weight:600;color:rgba(255,255,255,.85);margin-top:10px;background:rgba(255,255,255,.1);padding:4px 14px;border-radius:20px;display:inline-block;}
+.auth-body{padding:26px 28px;}
+.auth-body h2{font-size:16px;font-weight:600;margin-bottom:18px;}
+.auth-err{background:var(--red-bg);color:var(--red);border-radius:var(--r);padding:9px 12px;font-size:13px;margin-bottom:12px;display:none;}
+.auth-suc{background:var(--green-bg);color:#004D2E;border-radius:var(--r);padding:9px 12px;font-size:13px;margin-bottom:12px;display:none;}
+.auth-switch{text-align:center;font-size:13px;color:var(--ink3);margin-top:14px;}
+.auth-switch a{color:var(--blue);cursor:pointer;font-weight:500;}
+
+/* ── INVOICE PRINT ──────────────────────────────────── */
+.inv-wrap{font-family:'Inter',sans-serif;background:#fff;color:#0D1B2A;}
+.inv-hdr{background:#037EF3;padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;color:#fff;}
+.inv-brand{font-size:24px;font-weight:700;letter-spacing:2px;}
+.inv-org-info{font-size:11px;opacity:.75;line-height:1.8;margin-top:6px;}
+.inv-type-block{text-align:right;}
+.inv-type{font-size:30px;font-weight:700;opacity:.92;letter-spacing:-1px;}
+.inv-num{font-size:13px;font-weight:600;opacity:.8;margin-top:4px;}
+.inv-date{font-size:11px;opacity:.55;margin-top:2px;}
+.inv-body{padding:20px 28px;}
+.inv-to-box{background:#EBF5FF;border-left:3px solid var(--blue);padding:12px 16px;border-radius:0 var(--r) var(--r) 0;margin-bottom:18px;}
+.inv-to-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:4px;}
+.inv-to-name{font-size:14px;font-weight:700;color:var(--blue);}
+.inv-to-detail{font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.6;}
+.inv-table{width:100%;border-collapse:collapse;margin:14px 0;}
+.inv-table thead tr{background:var(--blue);}
+.inv-table thead th{color:#fff;padding:8px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;}
+.inv-table thead th.r{text-align:right;}
+.inv-table tbody tr:nth-child(even){background:#F8FBFF;}
+.inv-table tbody td{padding:10px;font-size:12px;border-bottom:1px solid var(--line);}
+.inv-table tbody td.r{text-align:right;font-weight:600;color:var(--blue);}
+.inv-table tbody td.code{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);}
+.inv-totals{display:flex;justify-content:flex-end;margin-bottom:14px;}
+.inv-totals-box{min-width:200px;}
+.inv-trow{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--ink2);}
+.inv-trow.grand{font-size:15px;font-weight:700;color:var(--blue);border-top:2px solid var(--blue);padding-top:7px;margin-top:4px;}
+.inv-pay{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:14px;}
+.inv-pay-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--blue);text-decoration:underline;margin-bottom:8px;}
+.inv-pay-row{display:flex;gap:8px;font-size:11px;margin-bottom:4px;}
+.inv-pay-key{font-weight:600;color:var(--blue);min-width:80px;}
+.inv-pay-val{color:var(--ink2);}
+.inv-sign{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.inv-sign-box{border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;}
+.inv-sign-role{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:4px;}
+.inv-sign-name{font-size:13px;font-weight:600;}
+.inv-sign-contact{font-size:10px;color:var(--ink3);}
+.inv-notes{background:#FFF9E0;border-left:3px solid var(--yellow);padding:10px 12px;border-radius:0 var(--r) var(--r) 0;margin-bottom:14px;}
+.inv-notes-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#8A6500;margin-bottom:4px;}
+.inv-notes p{font-size:11px;color:var(--ink2);line-height:1.6;}
+.inv-footer{padding:10px 28px;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+.inv-footer-org{font-size:10px;color:var(--ink3);}
+.inv-status-stamp{font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;}
+.inv-qr{text-align:center;margin:8px 0;}
+.inv-qr canvas{margin:0 auto;}
+.inv-qr p{font-size:10px;color:var(--ink3);margin-top:4px;}
+.status-paid{border:2px solid var(--green);color:var(--green);}
+.status-pending{border:2px solid var(--orange);color:var(--orange);}
+.status-partial{border:2px solid var(--blue);color:var(--blue);}
+
+/* ── BUDGET BAR ─────────────────────────────────────── */
+.dept-budget-row{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;margin-bottom:8px;}
+.dept-budget-row .dept-name{font-size:13px;font-weight:500;margin-bottom:4px;display:flex;justify-content:space-between;}
+.dept-budget-row .dept-amounts{font-size:11px;color:var(--ink3);margin-top:4px;display:flex;justify-content:space-between;}
+
+/* ── WORKFLOW STEP ──────────────────────────────────── */
+.wf-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;}
+.wf-pending{background:#FFF3E0;color:#B05A00;}
+.wf-approved{background:#E0FAF0;color:#00814A;}
+.wf-rejected{background:#FFEBEE;color:#B71C1C;}
+.wf-waiting{background:#EBF5FF;color:#003878;}
+
+/* ── AUDIT LOG ──────────────────────────────────────── */
+.log-entry{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);}
+.log-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.log-dot.create{background:var(--green);}
+.log-dot.update{background:var(--blue);}
+.log-dot.delete{background:var(--red);}
+.log-dot.validate{background:var(--teal);}
+.log-dot.reject{background:var(--orange);}
+.log-text{font-size:13px;}
+.log-time{font-size:11px;color:var(--ink3);margin-top:2px;}
+
+/* ── UPLOAD ZONE ────────────────────────────────────── */
+.upload-zone{border:2px dashed var(--line2);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;transition:all .2s;}
+.upload-zone:hover{border-color:var(--blue);background:var(--blue-bg);}
+.upload-zone.has-file{border-color:var(--green);background:var(--green-bg);}
+.upload-zone p{font-size:13px;color:var(--ink3);margin-top:6px;}
+.upload-zone .file-name{font-size:12px;font-weight:500;color:var(--green);margin-top:4px;}
+
+/* ── CHART MINI ─────────────────────────────────────── */
+.chart-bar-wrap{display:flex;flex-direction:column;gap:6px;}
+.chart-bar-item{display:flex;align-items:center;gap:10px;font-size:12px;}
+.chart-bar-label{min-width:60px;color:var(--ink2);}
+.chart-bar-track{flex:1;height:20px;background:var(--surface);border-radius:4px;overflow:hidden;position:relative;}
+.chart-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600;color:#fff;transition:width .5s;min-width:30px;}
+.chart-bar-amount{min-width:80px;text-align:right;color:var(--ink3);}
+
+/* ── PRINT ──────────────────────────────────────────── */
+@media print{
+  @page{size:A4 portrait;margin:0;}
+  html,body{background:#fff;}
+  .no-print,.sidebar,.topbar,.app-layout{display:none!important;}
+  .print-only{display:block!important;}
+  .modal-overlay{position:static;background:none;padding:0;display:block;}
+  .modal{max-height:none;box-shadow:none;border-radius:0;width:100%;}
+  .modal-hdr{display:none;}
+  .modal-body{padding:0;}
+  .inv-wrap{page-break-inside:avoid;}
+}
+.print-only{display:none;}
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main-area{margin-left:0;}
+  .hamburger{display:block;}
+  .fg-row,.fg-row3{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .content{padding:16px;}
+  .inv-sign{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════════════ -->
+<div id="AUTH" class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-hdr">
+      <div class="brand">AIESEC</div>
+      <div class="subtitle">Système de Gestion Financière</div>
+      <div class="sys-name">SGF-A v2.0</div>
+    </div>
+    <!-- LOGIN -->
+    <div class="auth-body" id="LF">
+      <h2>Connexion</h2>
+      <div class="auth-err" id="lerr"></div>
+      <div class="fg"><label>Nom d'utilisateur <span class="req">*</span></label><input id="lu" placeholder="votre identifiant" autocomplete="username"/></div>
+      <div class="fg"><label>Mot de passe <span class="req">*</span></label><input type="password" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <button class="btn btn-primary w100" onclick="doLogin()">Se connecter</button>
+      <div class="auth-switch">Pas de compte ? <a onclick="showForm('RF')">Créer un compte</a></div>
+    </div>
+    <!-- REGISTER -->
+    <div class="auth-body hidden" id="RF">
+      <h2>Créer un compte</h2>
+      <div class="auth-err" id="rerr"></div>
+      <div class="auth-suc" id="rsuc"></div>
+      <div class="fg-row">
+        <div class="fg"><label>Prénom <span class="req">*</span></label><input id="rfn" placeholder="Prénom"/></div>
+        <div class="fg"><label>Nom <span class="req">*</span></label><input id="rln" placeholder="Nom"/></div>
+      </div>
+      <div class="fg"><label>Nom d'utilisateur <span class="req">*</span></label><input id="ru" placeholder="identifiant unique (minuscules)"/></div>
+      <div class="fg-row">
+        <div class="fg"><label>Mot de passe <span class="req">*</span></label><input type="password" id="rpw" placeholder="Min. 6 caractères"/></div>
+        <div class="fg"><label>Confirmer <span class="req">*</span></label><input type="password" id="rpw2" placeholder="Répéter"/></div>
+      </div>
+      <div class="fg"><label>Rôle <span class="req">*</span></label>
+        <select id="rrole" onchange="toggleRoleCode()">
+          <option value="vpfl">VP Finance & Legal (Admin)</option>
+          <option value="lcp">LCP (Validateur)</option>
+          <option value="vpd">VP Département (Observateur)</option>
+        </select>
+      </div>
+      <div class="fg" id="rdept-wrap" style="display:none">
+        <label>Département</label>
+        <select id="rdept">
+          <option value="oGV">oGV</option><option value="iGT">iGT</option><option value="iGV">iGV</option>
+          <option value="BD">BD</option><option value="IM">IM</option><option value="TM">TM</option>
+          <option value="MKT">Marketing</option><option value="ADMIN">Administration</option>
+        </select>
+      </div>
+      <div class="fg" id="rcode-wrap">
+        <label>Code d'accès <span class="req">*</span></label>
+        <input type="password" id="rcode" placeholder="Requis pour VP F&L et LCP"/>
+        <span class="hint">Demandez ce code à votre LC Manager</span>
+      </div>
+      <button class="btn btn-primary w100" onclick="doRegister()">Créer mon compte</button>
+      <div class="auth-switch">Déjà un compte ? <a onclick="showForm('LF')">Se connecter</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════════════ -->
+<div id="APP" class="hidden">
+<div class="app-layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="SB">
+  <div class="sb-logo">
+    <div class="sb-logo-mark">A</div>
+    <div class="sb-logo-txt">
+      <div class="org" id="sb-org">AIESEC</div>
+      <div class="lc" id="sb-lc">Abomey-Calavi</div>
+    </div>
+  </div>
+  <div class="sb-term" id="sb-term">Term 25.26</div>
+
+  <div class="sb-sec">Menu</div>
+  <div class="sb-item act" data-pg="dashboard" onclick="goTo('dashboard',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Tableau de bord
+  </div>
+  <div class="sb-sec">Transactions</div>
+  <div class="sb-item" data-pg="revenue" onclick="goTo('revenue',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+    Entrées (Revenus)
+    <span class="badge badge-green text-xs" id="sb-rev-count">0</span>
+  </div>
+  <div class="sb-item" data-pg="expenses" onclick="goTo('expenses',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Sorties (Dépenses)
+    <span class="badge badge-orange text-xs" id="sb-exp-count">0</span>
+  </div>
+  <div class="sb-item" data-pg="invoices" onclick="goTo('invoices',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+    Factures & Reçus
+  </div>
+  <div class="sb-item" data-pg="budgets" onclick="goTo('budgets',this)" id="sb-budgets">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+    Budgets
+  </div>
+  <div class="sb-sec">Rapports</div>
+  <div class="sb-item" data-pg="audit" onclick="goTo('audit',this)" id="sb-audit">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Audit &amp; Logs
+  </div>
+  <div class="sb-item" data-pg="reports" onclick="goTo('reports',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    Rapports &amp; Export
+  </div>
+  <div class="sb-item" data-pg="settings" onclick="goTo('settings',this)" id="sb-settings">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    Paramètres
+  </div>
+
+  <div class="sb-bot">
+    <div class="sb-user">
+      <div class="sb-av" id="sb-av">?</div>
+      <div style="flex:1;min-width:0">
+        <div class="sb-uname" id="sb-uname">—</div>
+        <div class="sb-urole" id="sb-urole">—</div>
+      </div>
+      <button class="btn-icon" onclick="doLogout()" title="Déconnexion" style="color:rgba(255,255,255,.3)">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main-area">
+  <div class="topbar no-print">
+    <div class="flex gap8">
+      <button class="hamburger" onclick="document.getElementById('SB').classList.toggle('open')">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span class="topbar-title" id="pg-title">Tableau de bord</span>
+    </div>
+    <div class="topbar-right">
+      <span class="badge badge-teal text-xs" id="tb-lc">—</span>
+      <button class="btn btn-primary btn-sm" id="btn-new-rev" onclick="openRevModal()">+ Entrée</button>
+      <button class="btn btn-secondary btn-sm" id="btn-new-exp" onclick="openExpModal()">+ Dépense</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- DASHBOARD -->
+    <div class="pg act" id="pg-dashboard"></div>
+    <!-- REVENUE -->
+    <div class="pg" id="pg-revenue"></div>
+    <!-- EXPENSES -->
+    <div class="pg" id="pg-expenses"></div>
+    <!-- INVOICES -->
+    <div class="pg" id="pg-invoices"></div>
+    <!-- BUDGETS -->
+    <div class="pg" id="pg-budgets"></div>
+    <!-- AUDIT -->
+    <div class="pg" id="pg-audit"></div>
+    <!-- REPORTS -->
+    <div class="pg" id="pg-reports"></div>
+    <!-- SETTINGS -->
+    <div class="pg" id="pg-settings"></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- MODALS CONTAINER -->
+<div id="MODALS"></div>
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════
+// DATA MODEL & PERSISTENCE
+// ══════════════════════════════════════════════════════════
+const DB_KEY = 'sgfa_v1';
+
+const DEFAULT_CFG = {
+  org: 'AIESEC in Abomey-Calavi',
+  lc: 'Abomey-Calavi',
+  term: 'Term 25.26',
+  mandateYear: 2025,
+  email: 'aiesec.abomeycalavi@aiesec.net',
+  phone: '+229 40531497',
+  addr: 'AP2 office, ENEAM, GBEGAMEY, Cotonou, République du Bénin',
+  ifu: '',
+  momoMTN: '01 90 19 28 10',
+  momoMoov: '',
+  bankName: 'Centre de Chèques Postaux — La Poste',
+  bankAccount: '144038562010',
+  bankHolder: 'ASSOCIATION INTERNATIONALES DES ÉTUDIANTS EN SCIENCES ÉCONOMIQUES ET COMMERCIALES',
+  finName: '',
+  finRole: 'VP Finance & Legal',
+  finEmail: '',
+  finPhone: '',
+  defaultNotes: 'Si le paiement et le scan du reçu ne sont pas reçus dans les délais, des sanctions seront appliquées. En cas de dette, contactez le VP F&L dans les plus brefs délais.',
+  validationThreshold: 25000,
+  accessCode: 'aiesec2025',
+  prefixFac: 'FAC',
+  prefixRec: 'REC',
+  prefixDev: 'DEV'
+};
+
+const DEPARTMENTS = ['oGV','iGT','iGV','BD','IM','TM','MKT','ADMIN'];
+const DEPT_COLORS = {oGV:'blue',iGT:'teal',iGV:'purple',BD:'orange',IM:'green',TM:'red',MKT:'yellow',ADMIN:'gray'};
+
+const MOTIFS_REVENUE = [
+  {code:'ADM-FEE', label:'Admin Fee (membre)'},
+  {code:'ENB-FEE', label:'Enabling Fee'},
+  {code:'OGV-ROY', label:'oGV Affiliation Royalty'},
+  {code:'IGT-ROY', label:'iGT Affiliation Royalty'},
+  {code:'IGV-ROY', label:'iGV Affiliation Royalty'},
+  {code:'SPON', label:'Sponsoring partenaire'},
+  {code:'COTIS', label:'Cotisation annuelle'},
+  {code:'LATE-FEE', label:'Pénalité retard'},
+  {code:'EVENT', label:'Recette événement'},
+  {code:'OTHER-REV', label:'Autre recette'}
+];
+const MOTIFS_EXPENSE = [
+  {code:'MC-FEE', label:'MC Affiliation Fee'},
+  {code:'LOGIS', label:'Logistique'},
+  {code:'TRANS', label:'Transport/Déplacement'},
+  {code:'HEBERG', label:'Hébergement'},
+  {code:'MKT-EXP', label:'Marketing/Communication'},
+  {code:'IMPR', label:'Impression/Papeterie'},
+  {code:'BANQUE', label:'Frais bancaires'},
+  {code:'TEL', label:'Téléphone/Internet'},
+  {code:'EVENT-EXP', label:'Frais événement'},
+  {code:'OTHER-EXP', label:'Autre dépense'}
+];
+
+let DB = {cfg:{...DEFAULT_CFG}, transactions:[], budgets:[], users:[], auditLog:[], invoiceSeq:{FAC:0,REC:0,DEV:0}};
+let ME = null;
+
+function persist(){ try{localStorage.setItem(DB_KEY, JSON.stringify(DB));}catch(e){} }
+function loadDB(){
+  try{
+    const raw = localStorage.getItem(DB_KEY);
+    if(raw){ const p=JSON.parse(raw); DB={cfg:{...DEFAULT_CFG,...p.cfg}, transactions:p.transactions||[], budgets:p.budgets||[], users:p.users||[], auditLog:p.auditLog||[], invoiceSeq:p.invoiceSeq||{FAC:0,REC:0,DEV:0}}; }
+  }catch(e){}
+  if(!DB.users.length){
+    DB.users.push({id:'u0',username:'admin',fname:'Admin',lname:'AIESEC',role:'vpfl',dept:null,pw:hashPW('aiesec2025'),created:nowStr()});
+    persist();
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════════════
+function hashPW(p){let h=0;for(let i=0;i<p.length;i++){h=((h<<5)-h)+p.charCodeAt(i);h|=0;}return 'h'+Math.abs(h);}
+function uid(){return 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function nowStr(){return new Date().toLocaleString('fr-FR');}
+function today(){return new Date().toISOString().split('T')[0];}
+function fmtXOF(n){return Number(n).toLocaleString('fr-FR')+' FCFA';}
+function fmtDate(d){if(!d)return '—';try{return new Date(d).toLocaleDateString('fr-FR');}catch(e){return d;}}
+function v(id){return document.getElementById(id)?.value?.trim()||'';}
+function el(id){return document.getElementById(id);}
+function genDocNum(type){
+  const pre = type==='facture'?DB.cfg.prefixFac:type==='recu'?DB.cfg.prefixRec:DB.cfg.prefixDev;
+  const key = type==='facture'?'FAC':type==='recu'?'REC':'DEV';
+  DB.invoiceSeq[key]=(DB.invoiceSeq[key]||0)+1;
+  persist();
+  return `${pre}/${new Date().getFullYear()}/${String(DB.invoiceSeq[key]).padStart(5,'0')}`;
+}
+function genQRHash(txId){let h=0;const s='sgfa'+txId;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h).toString(36).toUpperCase();}
+
+// Roles
+function isAdmin(){return ME&&(ME.role==='vpfl');}
+function isLCP(){return ME&&(ME.role==='lcp');}
+function canCreate(){return ME&&(ME.role==='vpfl'||ME.role==='lcp');}
+function canEdit(tx){if(!ME)return false;if(tx.isImmutable)return false;return ME.role==='vpfl';}
+function canDelete(tx){if(!ME)return false;if(tx.isImmutable)return false;return ME.role==='vpfl'&&tx.status==='draft';}
+function canApprove(){return ME&&(ME.role==='lcp'||ME.role==='vpfl');}
+
+// Audit
+function addLog(action, entityType, entityId, oldVal, newVal){
+  DB.auditLog.unshift({id:uid(), userId:ME?ME.id:'?', userName:ME?ME.fname+' '+ME.lname:'Système', userRole:ME?ME.role:'?', action, entityType, entityId, oldVal, newVal, ts:nowStr()});
+  if(DB.auditLog.length>500) DB.auditLog=DB.auditLog.slice(0,500);
+  persist();
+}
+
+// Toast
+function toast(msg,type=''){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className='toast'+(type?' '+type:'');
+  t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>t.style.opacity='0',2500);
+  setTimeout(()=>t.remove(),2800);
+}
+
+// ══════════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════════
+function showForm(id){
+  ['LF','RF'].forEach(x=>el(x).classList.toggle('hidden',x!==id));
+}
+function toggleRoleCode(){
+  const r=v('rrole');
+  el('rdept-wrap').style.display=r==='vpd'?'block':'none';
+  el('rcode-wrap').style.display=r==='vpd'?'none':'block';
+}
+function doLogin(){
+  const u=v('lu'),p=v('lp'),err=el('lerr');
+  err.style.display='none';
+  if(!u||!p){err.textContent='Remplissez tous les champs.';err.style.display='block';return;}
+  const found=DB.users.find(x=>x.username===u&&x.pw===hashPW(p));
+  if(!found){err.textContent='Identifiant ou mot de passe incorrect.';err.style.display='block';addLog('LOGIN_FAIL','auth',null,null,{username:u});return;}
+  ME=found;
+  try{sessionStorage.setItem('sgfa_s',JSON.stringify({id:found.id,username:found.username,role:found.role}));}catch(e){}
+  addLog('LOGIN','auth',found.id,null,{username:found.username,role:found.role});
+  enterApp();
+}
+function doRegister(){
+  const fn=v('rfn'),ln=v('rln'),u=v('ru').toLowerCase(),pw=v('rpw'),pw2=v('rpw2'),role=v('rrole'),code=v('rcode'),dept=v('rdept');
+  const err=el('rerr'),suc=el('rsuc');
+  err.style.display='none';suc.style.display='none';
+  if(!fn||!ln||!u||!pw){err.textContent='Tous les champs obligatoires.';err.style.display='block';return;}
+  if(pw.length<6){err.textContent='Mot de passe trop court (min. 6).';err.style.display='block';return;}
+  if(pw!==pw2){err.textContent='Les mots de passe ne correspondent pas.';err.style.display='block';return;}
+  if(DB.users.find(x=>x.username===u)){err.textContent="Ce nom d'utilisateur est déjà pris.";err.style.display='block';return;}
+  if(role!=='vpd'&&code!==DB.cfg.accessCode){err.textContent='Code d\'accès incorrect.';err.style.display='block';return;}
+  const nu={id:uid(),username:u,fname:fn,lname:ln,role,dept:role==='vpd'?dept:null,pw:hashPW(pw),created:nowStr()};
+  DB.users.push(nu);persist();
+  addLog('REGISTER','user',nu.id,null,{username:u,role});
+  suc.textContent='Compte créé ! Vous pouvez maintenant vous connecter.';suc.style.display='block';
+  setTimeout(()=>showForm('LF'),2000);
+}
+function doLogout(){
+  if(ME) addLog('LOGOUT','auth',ME.id,null,null);
+  ME=null;
+  try{sessionStorage.removeItem('sgfa_s');}catch(e){}
+  el('APP').classList.add('hidden');
+  el('AUTH').style.display='flex';
+  el('lp').value='';
+}
+function enterApp(){
+  el('AUTH').style.display='none';
+  el('APP').classList.remove('hidden');
+  updateSidebar();
+  applyRoleUI();
+  goTo('dashboard',document.querySelector('.sb-item'));
+  updateSBCounts();
+}
+function updateSidebar(){
+  if(!ME)return;
+  el('sb-org').textContent=DB.cfg.org;
+  el('sb-lc').textContent=DB.cfg.lc;
+  el('sb-term').textContent=DB.cfg.term;
+  el('sb-uname').textContent=ME.fname+' '+ME.lname;
+  el('sb-urole').textContent={vpfl:'VP Finance & Legal',lcp:'LCP',vpd:'VP Département'}[ME.role]||ME.role;
+  el('sb-av').textContent=(ME.fname[0]+(ME.lname[0]||'')).toUpperCase();
+  el('tb-lc').textContent=DB.cfg.lc;
+}
+function applyRoleUI(){
+  // Restrict UI based on role
+  const admin=isAdmin(), lcp=isLCP();
+  if(!admin){el('sb-settings').style.opacity='0.4';}
+  if(!admin){el('sb-audit').style.opacity='0.4';}
+  if(!admin&&!lcp){
+    el('btn-new-rev').style.display='none';
+    el('btn-new-exp').style.display='none';
+  }
+}
+function updateSBCounts(){
+  const revs=DB.transactions.filter(t=>t.type==='revenue');
+  const exps=DB.transactions.filter(t=>t.type==='expense'&&t.workflowStatus==='pending');
+  el('sb-rev-count').textContent=revs.length;
+  el('sb-exp-count').textContent=exps.length||'';
+  el('sb-exp-count').style.display=exps.length?'inline-flex':'none';
+}
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
+const PAGE_TITLES={dashboard:'Tableau de bord',revenue:'Entrées — Revenus',expenses:'Sorties — Dépenses',invoices:'Factures & Reçus',budgets:'Budgets par département',audit:'Audit & Journal',reports:'Rapports & Export',settings:'Paramètres'};
+function goTo(pg, el_item){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('act'));
+  const pgEl=document.getElementById('pg-'+pg);
+  if(pgEl) pgEl.classList.add('act');
+  if(el_item) el_item.classList.add('act');
+  else{const found=document.querySelector(`[data-pg="${pg}"]`);if(found)found.classList.add('act');}
+  el('pg-title').textContent=PAGE_TITLES[pg]||pg;
+  if(window.innerWidth<768) document.getElementById('SB').classList.remove('open');
+  renderPage(pg);
+}
+function renderPage(pg){
+  switch(pg){
+    case 'dashboard': renderDashboard();break;
+    case 'revenue': renderRevenue();break;
+    case 'expenses': renderExpenses();break;
+    case 'invoices': renderInvoices();break;
+    case 'budgets': renderBudgets();break;
+    case 'audit': renderAudit();break;
+    case 'reports': renderReports();break;
+    case 'settings': renderSettings();break;
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// MODAL SYSTEM
+// ══════════════════════════════════════════════════════════
+function showModal(id,html,large=false){
+  closeModal();
+  const wrap=document.createElement('div');
+  wrap.className='modal-overlay';
+  wrap.id='mo-'+id;
+  wrap.innerHTML=`<div class="modal${large?' modal-lg':''}" onclick="event.stopPropagation()">${html}</div>`;
+  wrap.onclick=()=>closeModal();
+  document.getElementById('MODALS').appendChild(wrap);
+}
+function closeModal(){
+  document.querySelectorAll('.modal-overlay').forEach(m=>m.remove());
+}
+
+// ══════════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════════
+function renderDashboard(){
+  const txs=DB.transactions;
+  const revs=txs.filter(t=>t.type==='revenue');
+  const exps=txs.filter(t=>t.type==='expense'&&t.workflowStatus!=='rejected');
+  const totalRev=revs.reduce((s,t)=>s+t.amount,0);
+  const totalExp=exps.reduce((s,t)=>s+t.amount,0);
+  const totalPaid=revs.filter(t=>t.status==='paid').reduce((s,t)=>s+t.amount,0);
+  const pending=txs.filter(t=>t.type==='expense'&&t.workflowStatus==='pending').length;
+  const balance=totalRev-totalExp;
+
+  // Revenue by dept
+  const revByDept={};
+  revs.forEach(t=>{revByDept[t.department]=(revByDept[t.department]||0)+t.amount;});
+  const topDepts=Object.entries(revByDept).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const maxRevDept=topDepts[0]?.[1]||1;
+
+  // Monthly (last 6 months)
+  const months=[];
+  for(let i=5;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);months.push({label:d.toLocaleDateString('fr-FR',{month:'short'}),rev:0,exp:0,date:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);}
+  txs.forEach(t=>{
+    const m=t.date?.substring(0,7);
+    const mo=months.find(x=>x.date===m);
+    if(mo){if(t.type==='revenue')mo.rev+=t.amount;else if(t.type==='expense'&&t.workflowStatus!=='rejected')mo.exp+=t.amount;}
+  });
+  const maxMonth=Math.max(...months.map(m=>Math.max(m.rev,m.exp)),1);
+
+  el('pg-dashboard').innerHTML=`
+    <div class="stat-grid">
+      <div class="stat-card blue"><div class="slabel">Revenus totaux</div><div class="sval">${fmtXOF(totalRev)}</div><div class="ssub">${revs.length} transaction${revs.length>1?'s':''}</div></div>
+      <div class="stat-card red"><div class="slabel">Dépenses totales</div><div class="sval">${fmtXOF(totalExp)}</div><div class="ssub">${exps.length} dépense${exps.length>1?'s':''}</div></div>
+      <div class="stat-card ${balance>=0?'green':'red'}"><div class="slabel">Solde (trésorerie)</div><div class="sval">${fmtXOF(balance)}</div><div class="ssub">${balance>=0?'Excédent':'Déficit'}</div></div>
+      <div class="stat-card teal"><div class="slabel">Taux recouvrement</div><div class="sval">${totalRev?Math.round(totalPaid/totalRev*100):0}%</div><div class="ssub">${fmtXOF(totalPaid)} encaissé</div></div>
+      ${pending?`<div class="stat-card orange"><div class="slabel">En attente validation</div><div class="sval">${pending}</div><div class="ssub">dépense${pending>1?'s':''} LCP</div></div>`:''}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div class="card">
+        <div class="card-title">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+          Évolution 6 mois
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px;height:100px;padding-top:8px">
+          ${months.map(m=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+            <div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:80px">
+              <div style="flex:1;background:#037EF3;border-radius:3px 3px 0 0;height:${Math.round(m.rev/maxMonth*80)}px" title="Rev: ${fmtXOF(m.rev)}"></div>
+              <div style="flex:1;background:#E53935;border-radius:3px 3px 0 0;height:${Math.round(m.exp/maxMonth*80)}px" title="Dep: ${fmtXOF(m.exp)}"></div>
+            </div>
+            <span style="font-size:10px;color:var(--ink3)">${m.label}</span>
+          </div>`).join('')}
+        </div>
+        <div class="flex gap8" style="margin-top:8px;font-size:11px;color:var(--ink3)">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#037EF3;border-radius:2px"></span>Revenus</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#E53935;border-radius:2px"></span>Dépenses</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
+          Top départements (revenus)
+        </div>
+        ${topDepts.length?`<div class="chart-bar-wrap">${topDepts.map(([d,amt])=>{const pct=Math.round(amt/maxRevDept*100);const dc=DEPT_COLORS[d]||'gray';const col={'blue':'#037EF3','teal':'#0CB9C1','purple':'#7552CC','orange':'#F48924','green':'#00C16E','red':'#E53935','yellow':'#F0B429','gray':'#8898AA'}[dc]||'#8898AA';return `<div class="chart-bar-item"><div class="chart-bar-label">${d}</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%;background:${col}">${pct}%</div></div><div class="chart-bar-amount">${fmtXOF(amt)}</div></div>`}).join('')}</div>`:'<p class="text-muted text-sm">Aucune donnée</p>'}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="21,8 21,21 3,21 3,8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        Dernières transactions
+      </div>
+      ${txs.length?`<div class="table-wrap"><table class="data-table"><thead><tr><th>N°</th><th>Type</th><th>Date</th><th>Motif</th><th>Département</th><th>Montant</th><th>Statut</th></tr></thead><tbody>${txs.slice(0,8).map(t=>`<tr><td class="doc-num">${t.docNum||'—'}</td><td><span class="badge badge-${t.type==='revenue'?'green':'orange'}">${t.type==='revenue'?'Entrée':'Sortie'}</span></td><td style="white-space:nowrap">${fmtDate(t.date)}</td><td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.motifLabel||'—'}</td><td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'—'}</span></td><td class="amount">${fmtXOF(t.amount)}</td><td>${statusBadge(t)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty-state"><p>Aucune transaction enregistrée.</p></div>'}
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// STATUS HELPERS
+// ══════════════════════════════════════════════════════════
+function statusBadge(t){
+  if(t.type==='revenue'){
+    const m={pending:'badge-orange',partial:'badge-blue',paid:'badge-green',cancelled:'badge-gray'};
+    const l={pending:'En attente',partial:'Partiel',paid:'Payé',cancelled:'Annulé'};
+    return `<span class="badge ${m[t.status]||'badge-gray'}">${l[t.status]||t.status}</span>`;
+  }else{
+    const m={pending:'badge-orange',approved:'badge-green',rejected:'badge-red'};
+    const l={pending:'Attente LCP',approved:'Approuvé',rejected:'Rejeté'};
+    return `<span class="badge ${m[t.workflowStatus]||'badge-gray'}">${l[t.workflowStatus]||t.workflowStatus}</span>`;
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// REVENUE PAGE
+// ══════════════════════════════════════════════════════════
+function renderRevenue(){
+  const revs=DB.transactions.filter(t=>t.type==='revenue').sort((a,b)=>b.date?.localeCompare(a.date));
+  el('pg-revenue').innerHTML=`
+    <div class="flex gap8" style="margin-bottom:16px;flex-wrap:wrap">
+      <input id="rev-search" placeholder="Rechercher…" oninput="filterRevenue()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
+      <select id="rev-dept" onchange="filterRevenue()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
+        <option value="">Tous depts</option>${DEPARTMENTS.map(d=>`<option>${d}</option>`).join('')}
+      </select>
+      <select id="rev-status" onchange="filterRevenue()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
+        <option value="">Tous statuts</option><option value="pending">En attente</option><option value="partial">Partiel</option><option value="paid">Payé</option>
+      </select>
+      <div class="ml-auto flex gap8">
+        ${isAdmin()?`<button class="btn btn-primary btn-sm" onclick="openRevModal()">+ Nouvelle entrée</button>`:''}
+      </div>
+    </div>
+    <div id="rev-table-wrap">
+      ${buildRevTable(revs)}
+    </div>`;
+}
+function buildRevTable(revs){
+  if(!revs.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><p>Aucune entrée enregistrée.</p></div>`;
+  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>N°</th><th>Date</th><th>Client</th><th>Motif</th><th>Dept</th><th>EXPA ID</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead><tbody>
+  ${revs.map(t=>`<tr>
+    <td class="doc-num" style="cursor:pointer" onclick="viewInvoice('${t.id}')">${t.docNum||'—'}</td>
+    <td style="white-space:nowrap">${fmtDate(t.date)}</td>
+    <td>${t.client||'—'}</td>
+    <td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${t.motifLabel||''}">${t.motifLabel||'—'}</td>
+    <td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'—'}</span></td>
+    <td class="text-sm">${t.expaId?`<code>${t.expaId}</code>`:'—'}</td>
+    <td class="amount">${fmtXOF(t.amount)}</td>
+    <td>${statusBadge(t)}</td>
+    <td><div class="actions">
+      <button class="btn-icon" onclick="viewInvoice('${t.id}')" title="Voir facture">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      ${canEdit(t)?`<button class="btn-icon" onclick="editTransaction('${t.id}')" title="Modifier">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>`:''}
+      ${t.status!=='paid'&&isAdmin()?`<button class="btn btn-xs" onclick="markPaid('${t.id}')" style="background:var(--green-bg);color:#00814A;border:none">Marquer payé</button>`:''}
+      ${t.status==='paid'?`<button class="btn-icon" onclick="printInvoice('${t.id}')" title="Imprimer">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      </button>`:''}
+    </div></td>
+  </tr>`).join('')}
+  </tbody></table></div>`;
+}
+function filterRevenue(){
+  const q=v('rev-search').toLowerCase(),dept=v('rev-dept'),status=v('rev-status');
+  let revs=DB.transactions.filter(t=>t.type==='revenue').sort((a,b)=>b.date?.localeCompare(a.date));
+  if(q) revs=revs.filter(t=>(t.docNum+t.client+t.motifLabel+t.expaId).toLowerCase().includes(q));
+  if(dept) revs=revs.filter(t=>t.department===dept);
+  if(status) revs=revs.filter(t=>t.status===status);
+  el('rev-table-wrap').innerHTML=buildRevTable(revs);
+}
+
+// ══════════════════════════════════════════════════════════
+// EXPENSES PAGE
+// ══════════════════════════════════════════════════════════
+function renderExpenses(){
+  const exps=DB.transactions.filter(t=>t.type==='expense').sort((a,b)=>b.date?.localeCompare(a.date));
+  el('pg-expenses').innerHTML=`
+    <div class="flex gap8" style="margin-bottom:16px;flex-wrap:wrap">
+      <input id="exp-search" placeholder="Rechercher…" oninput="filterExpenses()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
+      <select id="exp-dept" onchange="filterExpenses()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
+        <option value="">Tous depts</option>${DEPARTMENTS.map(d=>`<option>${d}</option>`).join('')}
+      </select>
+      <select id="exp-ws" onchange="filterExpenses()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
+        <option value="">Tous statuts</option><option value="pending">En attente LCP</option><option value="approved">Approuvé</option><option value="rejected">Rejeté</option>
+      </select>
+      ${isAdmin()||isLCP()?`<div class="ml-auto"><button class="btn btn-primary btn-sm" onclick="openExpModal()">+ Nouvelle dépense</button></div>`:''}
+    </div>
+    <div id="exp-table-wrap">${buildExpTable(exps)}</div>`;
+}
+function buildExpTable(exps){
+  if(!exps.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><p>Aucune dépense enregistrée.</p></div>`;
+  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>N°</th><th>Date</th><th>Description</th><th>Catégorie</th><th>Dept</th><th>Montant</th><th>Justificatif</th><th>Statut workflow</th><th>Actions</th></tr></thead><tbody>
+  ${exps.map(t=>`<tr>
+    <td class="doc-num">${t.docNum||'—'}</td>
+    <td style="white-space:nowrap">${fmtDate(t.date)}</td>
+    <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.description||t.motifLabel||'—'}</td>
+    <td style="font-size:12px">${t.motifLabel||'—'}</td>
+    <td><span class="badge badge-${DEPT_COLORS[t.department]||'gray'}">${t.department||'—'}</span></td>
+    <td class="amount">${fmtXOF(t.amount)}</td>
+    <td>${t.proofFile?`<span class="badge badge-green">✓ Joint</span>`:`<span class="badge badge-gray">Absent</span>`}</td>
+    <td>${wfBadge(t.workflowStatus)}</td>
+    <td><div class="actions">
+      ${t.workflowStatus==='pending'&&canApprove()?`
+        <button class="btn btn-xs" onclick="approveExp('${t.id}')" style="background:var(--green-bg);color:#00814A;border:none">Approuver</button>
+        <button class="btn btn-xs" onclick="rejectExp('${t.id}')" style="background:var(--red-bg);color:var(--red);border:none">Rejeter</button>`:''}
+      ${canDelete(t)?`<button class="btn-icon" onclick="deleteTransaction('${t.id}')" title="Supprimer">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+      </button>`:''}
+      ${t.isImmutable?`<span class="badge badge-teal text-xs">🔒 Validée</span>`:''}
+    </div></td>
+  </tr>`).join('')}
+  </tbody></table></div>`;
+}
+function wfBadge(ws){
+  const m={pending:'wf-pending',approved:'wf-approved',rejected:'wf-rejected'};
+  const l={pending:'⏳ Attente LCP',approved:'✓ Approuvé',rejected:'✗ Rejeté'};
+  return `<span class="wf-badge ${m[ws]||'wf-pending'}">${l[ws]||ws}</span>`;
+}
+function filterExpenses(){
+  const q=v('exp-search').toLowerCase(),dept=v('exp-dept'),ws=v('exp-ws');
+  let exps=DB.transactions.filter(t=>t.type==='expense').sort((a,b)=>b.date?.localeCompare(a.date));
+  if(q) exps=exps.filter(t=>(t.docNum+t.description+t.motifLabel).toLowerCase().includes(q));
+  if(dept) exps=exps.filter(t=>t.department===dept);
+  if(ws) exps=exps.filter(t=>t.workflowStatus===ws);
+  el('exp-table-wrap').innerHTML=buildExpTable(exps);
+}
+function approveExp(id){
+  const t=DB.transactions.find(x=>x.id===id);
+  if(!t)return;
+  const old={workflowStatus:t.workflowStatus};
+  t.workflowStatus='approved';t.isImmutable=true;
+  addLog('APPROVE_EXPENSE','transaction',id,old,{workflowStatus:'approved'});
+  persist();renderExpenses();updateSBCounts();toast('Dépense approuvée et verrouillée.','ok');
+}
+function rejectExp(id){
+  const t=DB.transactions.find(x=>x.id===id);
+  if(!t)return;
+  const reason=prompt('Motif du rejet (optionnel) :');
+  const old={workflowStatus:t.workflowStatus};
+  t.workflowStatus='rejected';t.rejectReason=reason||'';
+  addLog('REJECT_EXPENSE','transaction',id,old,{workflowStatus:'rejected',reason});
+  persist();renderExpenses();updateSBCounts();toast('Dépense rejetée.','warn');
+}
+function markPaid(id){
+  const t=DB.transactions.find(x=>x.id===id);if(!t)return;
+  const old={status:t.status};
+  t.status='paid';t.isImmutable=true;
+  addLog('MARK_PAID','transaction',id,old,{status:'paid'});
+  persist();renderRevenue();renderDashboard&&renderDashboard();toast('Entrée marquée comme payée et verrouillée.','ok');
+}
+function deleteTransaction(id){
+  const t=DB.transactions.find(x=>x.id===id);if(!t)return;
+  if(!confirm('Supprimer cette transaction ? (Irréversible)'))return;
+  DB.transactions=DB.transactions.filter(x=>x.id!==id);
+  addLog('DELETE','transaction',id,t,null);
+  persist();renderPage(document.querySelector('.sb-item.act')?.dataset?.pg||'dashboard');
+  updateSBCounts();toast('Transaction supprimée.','warn');
+}
+
+// ══════════════════════════════════════════════════════════
+// REVENUE MODAL (NEW / EDIT)
+// ══════════════════════════════════════════════════════════
+function openRevModal(editId=null){
+  if(!isAdmin()){toast('Accès non autorisé.','err');return;}
+  const t=editId?DB.transactions.find(x=>x.id===editId):null;
+  showModal('rev',`
+    <div class="modal-hdr"><h2>${t?'Modifier entrée':'Nouvelle entrée (Revenu)'}</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="fg-row3">
+        <div class="fg"><label>Type de document <span class="req">*</span></label>
+          <select id="m-doctype">
+            <option value="facture" ${t?.docType==='facture'?'selected':''}>Facture</option>
+            <option value="recu" ${t?.docType==='recu'||!t?'selected':''}>Reçu de paiement</option>
+            <option value="devis" ${t?.docType==='devis'?'selected':''}>Devis / Proforma</option>
+          </select>
+        </div>
+        <div class="fg"><label>Date <span class="req">*</span></label><input type="date" id="m-date" value="${t?.date||today()}"/></div>
+        <div class="fg"><label>Échéance</label><input type="date" id="m-due" value="${t?.dueDate||''}"/></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>Client / Organisation <span class="req">*</span></label><input id="m-client" placeholder="Nom du client ou EP" value="${t?.client||''}"/></div>
+        <div class="fg"><label>IFU client (partenaire)</label><input id="m-ifu" placeholder="ex: 1234567890123" value="${t?.clientIFU||''}"/></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>Email client</label><input type="email" id="m-cemail" placeholder="email@exemple.com" value="${t?.clientEmail||''}"/></div>
+        <div class="fg"><label>EXPA ID (échanges)</label><input id="m-expa" placeholder="ex: EP123456789" value="${t?.expaId||''}"/><span class="hint">Obligatoire pour les programmes d'échange</span></div>
+      </div>
+      <div class="sec-div">Lignes / Prestations</div>
+      <div id="m-lines">${buildLinesForms(t?.lines||[{code:'',desc:'',qty:1,pu:0}])}</div>
+      <button class="btn btn-ghost btn-sm" onclick="addLine()">+ Ajouter une ligne</button>
+      <div class="totals-box" style="background:var(--blue-bg);border:1.5px solid #B3D4FF;border-radius:var(--r);padding:12px 16px;margin:12px 0;text-align:right">
+        <div style="font-size:13px;color:var(--ink2)">Total HT : <strong id="m-ht">0 FCFA</strong></div>
+        <div style="font-size:13px;color:var(--ink2)">Taxe (0%) : 0 FCFA</div>
+        <div style="font-size:16px;font-weight:700;color:var(--blue);margin-top:6px;border-top:1.5px solid #B3D4FF;padding-top:6px">Total TTC : <span id="m-ttc">0 FCFA</span></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>Département <span class="req">*</span></label>
+          <select id="m-dept">${DEPARTMENTS.map(d=>`<option value="${d}" ${t?.department===d?'selected':''}>${d}</option>`).join('')}</select>
+        </div>
+        <div class="fg"><label>Motif / Catégorie <span class="req">*</span></label>
+          <select id="m-motif">${MOTIFS_REVENUE.map(m=>`<option value="${m.code}" ${t?.motifCode===m.code?'selected':''}>${m.label}</option>`).join('')}</select>
+        </div>
+      </div>
+      <div class="sec-div">Paiement</div>
+      <div class="fg-row">
+        <div class="fg"><label>Mode de paiement</label>
+          <select id="m-pmode">
+            <option value="momo-mtn" ${t?.payMode==='momo-mtn'?'selected':''}>Mobile Money MTN</option>
+            <option value="momo-moov" ${t?.payMode==='momo-moov'?'selected':''}>Moov Money</option>
+            <option value="virement" ${t?.payMode==='virement'?'selected':''}>Virement bancaire</option>
+            <option value="especes" ${t?.payMode==='especes'?'selected':''}>Espèces</option>
+            <option value="cheque" ${t?.payMode==='cheque'?'selected':''}>Chèque</option>
+          </select>
+        </div>
+        <div class="fg"><label>Statut paiement</label>
+          <select id="m-status">
+            <option value="pending" ${(!t||t.status==='pending')?'selected':''}>En attente</option>
+            <option value="partial" ${t?.status==='partial'?'selected':''}>Partiel</option>
+            <option value="paid" ${t?.status==='paid'?'selected':''}>Payé</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>Notes / Objet</label><textarea id="m-notes" rows="2">${t?.notes||''}</textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveRevenue('${editId||''}')">Enregistrer &amp; Archiver</button>
+    </div>`,true);
+  calcLines();
+}
+function buildLinesForms(lines){
+  return lines.map((_,i)=>`<div class="line-row" id="lr-${i}" style="display:grid;grid-template-columns:1.5fr 3fr 60px 100px 80px 30px;gap:8px;margin-bottom:8px;align-items:center">
+    <input placeholder="Code" class="lc-code" style="padding:7px 8px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:12px;font-family:'JetBrains Mono',monospace;outline:none"/>
+    <input placeholder="Description" class="lc-desc" style="padding:7px 8px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:12px;outline:none" oninput="calcLines()"/>
+    <input type="number" value="1" min="1" class="lc-qty" style="padding:7px 8px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:12px;outline:none;text-align:center" oninput="calcLines()"/>
+    <input type="number" value="0" min="0" class="lc-pu" placeholder="P.U. FCFA" style="padding:7px 8px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:12px;outline:none" oninput="calcLines()"/>
+    <span class="lc-total" style="font-size:12px;font-weight:600;color:var(--blue);text-align:right">0 FCFA</span>
+    <button onclick="removeLine(this)" class="btn-icon" style="color:var(--red)"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>`).join('');
+}
+function addLine(){
+  const c=document.getElementById('m-lines');
+  const i=c.querySelectorAll('.line-row').length;
+  const d=document.createElement('div');
+  d.innerHTML=buildLinesForms([{}]);
+  c.appendChild(d.firstElementChild);
+}
+function removeLine(btn){btn.closest('.line-row').remove();calcLines();}
+function calcLines(){
+  let total=0;
+  document.querySelectorAll('#m-lines .line-row').forEach(r=>{
+    const qty=parseFloat(r.querySelector('.lc-qty')?.value)||0;
+    const pu=parseFloat(r.querySelector('.lc-pu')?.value)||0;
+    const t=qty*pu;total+=t;
+    const ts=r.querySelector('.lc-total');if(ts)ts.textContent=fmtXOF(t);
+  });
+  const ht=el('m-ht'),ttc=el('m-ttc');
+  if(ht)ht.textContent=fmtXOF(total);
+  if(ttc)ttc.textContent=fmtXOF(total);
+}
+function getLines(){
+  const lines=[];
+  document.querySelectorAll('#m-lines .line-row').forEach(r=>{
+    const desc=r.querySelector('.lc-desc')?.value?.trim();
+    const qty=parseFloat(r.querySelector('.lc-qty')?.value)||0;
+    const pu=parseInt(r.querySelector('.lc-pu')?.value)||0;
+    if(desc) lines.push({code:r.querySelector('.lc-code')?.value?.trim()||'',desc,qty,pu,total:qty*pu});
+  });
+  return lines;
+}
+function saveRevenue(editId=''){
+  const client=v('m-client'),dept=v('m-dept'),doctype=v('m-doctype'),date=v('m-date');
+  if(!client||!dept||!date){toast('Remplissez les champs obligatoires.','err');return;}
+  const lines=getLines();
+  if(!lines.length){toast('Ajoutez au moins une ligne.','err');return;}
+  const amount=lines.reduce((s,l)=>s+l.total,0);
+  const motifCode=v('m-motif');
+  const motifLabel=MOTIFS_REVENUE.find(m=>m.code===motifCode)?.label||motifCode;
+  if(editId){
+    const t=DB.transactions.find(x=>x.id===editId);if(!t)return;
+    if(t.isImmutable){toast('Transaction verrouillée, non modifiable.','err');return;}
+    const old={...t};
+    Object.assign(t,{docType:doctype,date,dueDate:v('m-due'),client,clientIFU:v('m-ifu'),clientEmail:v('m-cemail'),expaId:v('m-expa'),lines,amount,department:dept,motifCode,motifLabel,payMode:v('m-pmode'),status:v('m-status'),notes:v('m-notes')});
+    addLog('UPDATE','transaction',editId,old,t);
+    persist();closeModal();renderRevenue();toast('Entrée modifiée.','ok');
+  }else{
+    const tx={id:uid(),type:'revenue',docType:doctype,docNum:genDocNum(doctype),date,dueDate:v('m-due'),client,clientIFU:v('m-ifu'),clientEmail:v('m-cemail'),expaId:v('m-expa'),lines,amount,department:dept,motifCode,motifLabel,payMode:v('m-pmode'),status:v('m-status')!=='pending'?v('m-status'):'pending',notes:v('m-notes'),isImmutable:false,qrHash:genQRHash(uid()),createdBy:ME?.id,createdByName:ME?.fname+' '+ME?.lname,createdAt:nowStr()};
+    if(tx.status==='paid')tx.isImmutable=true;
+    DB.transactions.unshift(tx);
+    addLog('CREATE','transaction',tx.id,null,tx);
+    persist();closeModal();renderRevenue();updateSBCounts();toast('Entrée enregistrée !','ok');
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// EXPENSE MODAL
+// ══════════════════════════════════════════════════════════
+function openExpModal(editId=null){
+  if(!canCreate()){toast('Accès non autorisé.','err');return;}
+  const t=editId?DB.transactions.find(x=>x.id===editId):null;
+  const threshold=DB.cfg.validationThreshold;
+  showModal('exp',`
+    <div class="modal-hdr"><h2>${t?'Modifier dépense':'Nouvelle dépense'}</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="alert alert-info">Les dépenses ≥ ${fmtXOF(threshold)} nécessitent l'approbation du LCP avant d'être validées.</div>
+      <div class="fg-row">
+        <div class="fg"><label>Date <span class="req">*</span></label><input type="date" id="e-date" value="${t?.date||today()}"/></div>
+        <div class="fg"><label>Fournisseur / Bénéficiaire</label><input id="e-supp" placeholder="Nom du fournisseur" value="${t?.supplier||''}"/></div>
+      </div>
+      <div class="fg"><label>Description <span class="req">*</span></label><input id="e-desc" placeholder="Description détaillée de la dépense" value="${t?.description||''}"/></div>
+      <div class="fg-row">
+        <div class="fg"><label>Catégorie <span class="req">*</span></label>
+          <select id="e-motif">${MOTIFS_EXPENSE.map(m=>`<option value="${m.code}" ${t?.motifCode===m.code?'selected':''}>${m.label}</option>`).join('')}</select>
+        </div>
+        <div class="fg"><label>Département <span class="req">*</span></label>
+          <select id="e-dept">${DEPARTMENTS.map(d=>`<option value="${d}" ${t?.department===d?'selected':''}>${d}</option>`).join('')}</select>
+        </div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>Montant (FCFA) <span class="req">*</span></label><input type="number" id="e-amount" min="0" step="1" placeholder="0" value="${t?.amount||''}" oninput="checkExpThreshold()"/></div>
+        <div class="fg"><label>Mode de paiement</label>
+          <select id="e-pmode">
+            <option value="momo-mtn">Mobile Money MTN</option><option value="momo-moov">Moov Money</option>
+            <option value="especes">Espèces</option><option value="virement">Virement</option><option value="cheque">Chèque</option>
+          </select>
+        </div>
+      </div>
+      <div id="e-threshold-alert" class="hidden"></div>
+      <div class="fg"><label>Pièce jointe (facture fournisseur / reçu) <span class="req">*</span></label>
+        <div class="upload-zone ${t?.proofFile?'has-file':''}" onclick="triggerUpload('e-proof-input')" id="e-upload-zone">
+          <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto;opacity:.4"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <p>Cliquez pour joindre la facture ou le reçu</p>
+          <div class="file-name" id="e-proof-name">${t?.proofFile||''}</div>
+        </div>
+        <input type="file" id="e-proof-input" style="display:none" accept="image/*,.pdf" onchange="handleUpload('e-proof-input','e-proof-name','e-upload-zone')"/>
+      </div>
+      <div class="fg"><label>Notes</label><textarea id="e-notes" rows="2">${t?.notes||''}</textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveExpense('${editId||''}')">Soumettre pour validation</button>
+    </div>`,true);
+}
+function checkExpThreshold(){
+  const amt=parseInt(v('e-amount'))||0;const thr=DB.cfg.validationThreshold;
+  const div=el('e-threshold-alert');
+  if(amt>=thr){div.className='alert alert-warn';div.textContent=`⚠ Montant ≥ ${fmtXOF(thr)} : approbation LCP requise.`;div.classList.remove('hidden');}
+  else div.classList.add('hidden');
+}
+function triggerUpload(inputId){document.getElementById(inputId)?.click();}
+function handleUpload(inputId, nameId, zoneId){
+  const f=document.getElementById(inputId)?.files[0];if(!f)return;
+  const nameEl=el(nameId);if(nameEl)nameEl.textContent=f.name;
+  const zoneEl=el(zoneId);if(zoneEl)zoneEl.classList.add('has-file');
+}
+function saveExpense(editId=''){
+  const desc=v('e-desc'),dept=v('e-dept'),date=v('e-date'),amtStr=v('e-amount');
+  if(!desc||!dept||!date||!amtStr){toast('Remplissez tous les champs obligatoires.','err');return;}
+  const amount=parseInt(amtStr);
+  if(isNaN(amount)||amount<=0){toast('Montant invalide.','err');return;}
+  const proofInput=document.getElementById('e-proof-input');
+  const proofFile=proofInput?.files[0]?.name||'';
+  const motifCode=v('e-motif');
+  const motifLabel=MOTIFS_EXPENSE.find(m=>m.code===motifCode)?.label||motifCode;
+  const needsApproval=amount>=DB.cfg.validationThreshold;
+  if(editId){
+    const t=DB.transactions.find(x=>x.id===editId);if(!t)return;
+    const old={...t};
+    Object.assign(t,{date,supplier:v('e-supp'),description:desc,motifCode,motifLabel,department:dept,amount,payMode:v('e-pmode'),proofFile,notes:v('e-notes')});
+    addLog('UPDATE','transaction',editId,old,t);
+    persist();closeModal();renderExpenses();toast('Dépense modifiée.','ok');
+  }else{
+    const docNum=`DEP/${new Date().getFullYear()}/${String(DB.transactions.filter(t=>t.type==='expense').length+1).padStart(4,'0')}`;
+    const tx={id:uid(),type:'expense',docNum,date,supplier:v('e-supp'),description:desc,motifCode,motifLabel,department:dept,amount,payMode:v('e-pmode'),proofFile,notes:v('e-notes'),workflowStatus:needsApproval?'pending':'approved',isImmutable:!needsApproval,createdBy:ME?.id,createdByName:ME?.fname+' '+ME?.lname,createdAt:nowStr()};
+    DB.transactions.unshift(tx);
+    addLog('CREATE','transaction',tx.id,null,tx);
+    persist();closeModal();renderExpenses();updateSBCounts();
+    toast(needsApproval?'Dépense soumise pour approbation LCP.':'Dépense enregistrée et approuvée.','ok');
+  }
+}
+function editTransaction(id){const t=DB.transactions.find(x=>x.id===id);if(t?.type==='revenue')openRevModal(id);else openExpModal(id);}
+
+// ══════════════════════════════════════════════════════════
+// INVOICES PAGE
+// ══════════════════════════════════════════════════════════
+function renderInvoices(){
+  const docs=DB.transactions.filter(t=>t.type==='revenue').sort((a,b)=>b.date?.localeCompare(a.date));
+  el('pg-invoices').innerHTML=`
+    <div class="flex gap8" style="margin-bottom:16px;flex-wrap:wrap">
+      <input id="inv-search" placeholder="Rechercher N°, client…" oninput="filterInvoices()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none;min-width:200px"/>
+      <select id="inv-type" onchange="filterInvoices()" style="padding:7px 12px;border:1.5px solid var(--line2);border-radius:var(--r);font-size:13px;outline:none">
+        <option value="">Tous types</option><option value="facture">Factures</option><option value="recu">Reçus</option><option value="devis">Devis</option>
+      </select>
+    </div>
+    <div id="inv-table-wrap">${buildInvTable(docs)}</div>`;
+}
+function buildInvTable(docs){
+  if(!docs.length) return `<div class="empty-state"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg><p>Aucune facture émise.</p></div>`;
+  const typeMap={facture:'FACTURE',recu:'REÇU',devis:'DEVIS'};
+  return `<div class="table-wrap"><table class="data-table"><thead><tr><th>Numéro</th><th>Type</th><th>Date</th><th>Client</th><th>EXPA ID</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead><tbody>
+  ${docs.map(t=>`<tr>
+    <td class="doc-num">${t.docNum||'—'}</td>
+    <td><span class="badge badge-blue">${typeMap[t.docType]||'—'}</span></td>
+    <td>${fmtDate(t.date)}</td>
+    <td>${t.client||'—'}</td>
+    <td>${t.expaId?`<code class="text-xs">${t.expaId}</code>`:'—'}</td>
+    <td class="amount">${fmtXOF(t.amount)}</td>
+    <td>${statusBadge(t)}</td>
+    <td><div class="actions">
+      <button class="btn btn-xs btn-secondary" onclick="viewInvoice('${t.id}')">Aperçu</button>
+      <button class="btn btn-xs btn-primary" onclick="printInvoice('${t.id}')">PDF</button>
+    </div></td>
+  </tr>`).join('')}
+  </tbody></table></div>`;
+}
+function filterInvoices(){
+  const q=v('inv-search').toLowerCase(),type=v('inv-type');
+  let docs=DB.transactions.filter(t=>t.type==='revenue').sort((a,b)=>b.date?.localeCompare(a.date));
+  if(q) docs=docs.filter(t=>(t.docNum+t.client).toLowerCase().includes(q));
+  if(type) docs=docs.filter(t=>t.docType===type);
+  el('inv-table-wrap').innerHTML=buildInvTable(docs);
+}
+
+// ══════════════════════════════════════════════════════════
+// INVOICE VIEW / PRINT
+// ══════════════════════════════════════════════════════════
+function buildInvoiceHTML(t){
+  const cfg=DB.cfg;
+  const typeLabel={facture:'INVOICE / FACTURE',recu:'PAYMENT RECEIPT / REÇU',devis:'PROFORMA / DEVIS'};
+  const rows=(t.lines||[]).map(l=>`<tr>
+    <td class="code">${l.code||'—'}</td>
+    <td>${l.desc}</td>
+    <td class="r">${fmtXOF(l.pu)}</td>
+    <td style="text-align:center">${l.qty}</td>
+    <td class="r">${fmtXOF(l.total)}</td>
+  </tr>`).join('');
+  const payLines=[
+    cfg.momoMTN?`<div class="inv-pay-row"><span class="inv-pay-key">MTN MoMo</span><span class="inv-pay-val">${cfg.momoMTN}</span></div>`:'',
+    cfg.momoMoov?`<div class="inv-pay-row"><span class="inv-pay-key">Moov Money</span><span class="inv-pay-val">${cfg.momoMoov}</span></div>`:'',
+    cfg.bankAccount?`<div class="inv-pay-row"><span class="inv-pay-key">Compte CCP</span><span class="inv-pay-val">${cfg.bankAccount}</span></div>`:'',
+    cfg.bankHolder?`<div class="inv-pay-row"><span class="inv-pay-key">Titulaire</span><span class="inv-pay-val" style="font-size:10px">${cfg.bankHolder}</span></div>`:'',
+    cfg.bankName?`<div class="inv-pay-row"><span class="inv-pay-key">Banque</span><span class="inv-pay-val">${cfg.bankName}</span></div>`:'',
+  ].filter(Boolean).join('');
+  const statusClass=t.status==='paid'?'status-paid':t.status==='partial'?'status-partial':'status-pending';
+  const statusLabel=t.status==='paid'?'✓ PAYÉ':t.status==='partial'?'PARTIEL':'EN ATTENTE';
+  return `<div class="inv-wrap">
+    <div class="inv-hdr">
+      <div>
+        <div class="inv-brand">AIESEC</div>
+        <div style="font-size:13px;font-weight:600;opacity:.8;margin-top:2px">${cfg.org}</div>
+        <div class="inv-org-info">
+          ${cfg.addr?`📍 ${cfg.addr}<br>`:''}
+          ${cfg.email?`✉ ${cfg.email}  `:''}${cfg.phone?`📞 ${cfg.phone}`:''}
+          ${cfg.ifu?`<br>IFU : ${cfg.ifu}`:''}
+        </div>
+      </div>
+      <div class="inv-type-block">
+        <div class="inv-type">${typeLabel[t.docType]||'DOCUMENT'}</div>
+        <div class="inv-num">${t.docNum}</div>
+        <div class="inv-date">${fmtDate(t.date)}</div>
+        ${t.dueDate?`<div class="inv-date">Échéance : ${fmtDate(t.dueDate)}</div>`:''}
+      </div>
+    </div>
+    <div class="inv-body">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;margin-bottom:16px">
+        <div class="inv-to-box">
+          <div class="inv-to-label">Destinataire / Invoice To</div>
+          <div class="inv-to-name">${t.client||'—'}</div>
+          <div class="inv-to-detail">
+            ${t.clientEmail?`✉ ${t.clientEmail}<br>`:''}
+            ${t.clientIFU?`IFU : ${t.clientIFU}`:''}
+            ${t.expaId?`<br>EXPA ID : <strong>${t.expaId}</strong>`:''}
+          </div>
+        </div>
+        <div style="text-align:right;padding-top:4px">
+          <div class="inv-status-stamp ${statusClass}">${statusLabel}</div>
+          ${t.expaId?`<div style="font-size:10px;color:var(--ink3);margin-top:6px">Programme d'échange</div>`:''}
+        </div>
+      </div>
+      <table class="inv-table">
+        <thead><tr><th>Code</th><th>Description</th><th class="r">P.U. (FCFA)</th><th style="text-align:center">Qté</th><th class="r">Total (FCFA)</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="inv-totals">
+        <div class="inv-totals-box">
+          <div class="inv-trow"><span>Total HT</span><span>${fmtXOF(t.amount)}</span></div>
+          <div class="inv-trow"><span>Taxe (0%)</span><span>0 FCFA</span></div>
+          <div class="inv-trow grand"><span>TOTAL TTC</span><span>${fmtXOF(t.amount)}</span></div>
+        </div>
+      </div>
+      ${payLines?`<div class="inv-pay"><div class="inv-pay-title">Informations de paiement</div>${payLines}</div>`:''}
+      <div class="inv-sign">
+        <div class="inv-sign-box">
+          <div class="inv-sign-role">${cfg.finRole||'VP Finance & Legal'}</div>
+          <div class="inv-sign-name">${cfg.finName||ME?.fname+' '+ME?.lname||'—'}</div>
+          ${cfg.finEmail?`<div class="inv-sign-contact">${cfg.finEmail}</div>`:''}
+          ${cfg.finPhone?`<div class="inv-sign-contact">${cfg.finPhone}</div>`:''}
+        </div>
+        <div class="inv-sign-box">
+          <div class="inv-sign-role">Émis par</div>
+          <div class="inv-sign-name">${t.createdByName||'—'}</div>
+          <div class="inv-sign-contact">${cfg.term||''}</div>
+        </div>
+      </div>
+      ${cfg.defaultNotes?`<div class="inv-notes"><div class="inv-notes-title">Notes</div><p>${t.notes||cfg.defaultNotes}</p></div>`:''}
+      <div class="inv-qr">
+        <div id="qr-${t.id}" style="display:inline-block"></div>
+        <p>Vérification : ${t.qrHash||'—'}</p>
+      </div>
+    </div>
+    <div class="inv-footer">
+      <div class="inv-footer-org">${cfg.org} — ${cfg.addr||''}</div>
+      <div style="font-size:10px;color:var(--ink3)">Document généré par SGF-A • ${nowStr()}</div>
+    </div>
+  </div>`;
+}
+function viewInvoice(id){
+  const t=DB.transactions.find(x=>x.id===id);if(!t)return;
+  showModal('view',`
+    <div class="modal-hdr">
+      <h2>Aperçu — ${t.docNum}</h2>
+      <div class="flex gap8">
+        <button class="btn btn-primary btn-sm" onclick="printInvoice('${id}')">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimer / PDF
+        </button>
+        <button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="modal-body">${buildInvoiceHTML(t)}</div>`,true);
+  setTimeout(()=>{
+    try{if(typeof QRCode!=='undefined'&&el(`qr-${id}`)){new QRCode(el(`qr-${id}`),{text:`SGF-A:${t.qrHash}:${t.docNum}`,width:64,height:64,colorDark:'#037EF3',colorLight:'#fff'});}}catch(e){}
+  },100);
+}
+function printInvoice(id){
+  const t=DB.transactions.find(x=>x.id===id);if(!t)return;
+  const w=window.open('','_blank','width=900,height=700');
+  const html=buildInvoiceHTML(t);
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>${t.docNum}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    body{font-family:'Inter',sans-serif;font-size:13px;color:#0D1B2A;background:#fff;}
+    @page{size:A4 portrait;margin:0;}
+    ${document.querySelector('style').textContent}
+  </style></head><body>${html}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+  <script>window.onload=function(){try{new QRCode(document.getElementById('qr-${id}'),{text:'SGF-A:${t.qrHash}:${t.docNum}',width:80,height:80,colorDark:'#037EF3',colorLight:'#fff'});}catch(e){}setTimeout(()=>window.print(),800);};<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+// ══════════════════════════════════════════════════════════
+// BUDGETS
+// ══════════════════════════════════════════════════════════
+function renderBudgets(){
+  const canEdit2=isAdmin();
+  // Compute spent per dept
+  const spent={};
+  DB.transactions.filter(t=>t.type==='expense'&&t.workflowStatus!=='rejected').forEach(t=>{spent[t.department]=(spent[t.department]||0)+t.amount;});
+  el('pg-budgets').innerHTML=`
+    <div class="flex gap8" style="margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:600">Budgets — ${DB.cfg.term}</h3>
+      <div class="ml-auto">
+        ${canEdit2?`<button class="btn btn-primary btn-sm" onclick="openBudgetModal()">Définir/modifier un budget</button>`:''}
+      </div>
+    </div>
+    ${DEPARTMENTS.map(dept=>{
+      const budget=DB.budgets.find(b=>b.department===dept&&b.mandateYear===DB.cfg.mandateYear);
+      const alloc=budget?.allocated||0;
+      const used=spent[dept]||0;
+      const pct=alloc?Math.min(Math.round(used/alloc*100),100):0;
+      const fillClass=pct>=100?'over':pct>=80?'warn':'ok';
+      const rev=DB.transactions.filter(t=>t.type==='revenue'&&t.department===dept).reduce((s,t)=>s+t.amount,0);
+      return `<div class="dept-budget-row">
+        <div class="dept-name">
+          <span><span class="badge badge-${DEPT_COLORS[dept]||'gray'}">${dept}</span></span>
+          <span class="text-sm text-muted">${alloc?`${pct}% utilisé`:canEdit2?'<em>Aucun budget défini</em>':'—'}</span>
+        </div>
+        ${alloc?`<div class="prog-bar"><div class="prog-fill ${fillClass}" style="width:${pct}%"></div></div>`:
+        canEdit2?`<div style="font-size:12px;color:var(--ink3)">Cliquez sur "Définir un budget" pour configurer ce département.</div>`:''}
+        <div class="dept-amounts">
+          <span>Revenus : <strong>${fmtXOF(rev)}</strong></span>
+          <span>Dépenses : <strong>${fmtXOF(used)}</strong></span>
+          ${alloc?`<span>Budget : <strong>${fmtXOF(alloc)}</strong></span><span style="color:${pct>=100?'var(--red)':pct>=80?'var(--orange)':'var(--green)'}">Restant : <strong>${fmtXOF(Math.max(alloc-used,0))}</strong></span>`:''}
+        </div>
+        ${pct>=80&&alloc?`<div class="alert ${pct>=100?'alert-danger':'alert-warn'}" style="margin-top:6px">${pct>=100?`⚠ Budget dépassé de ${fmtXOF(used-alloc)}`:`⚠ Budget utilisé à ${pct}% — Alertez le VP F&L`}</div>`:''}
+      </div>`;
+    }).join('')}`;
+}
+function openBudgetModal(){
+  showModal('budget',`
+    <div class="modal-hdr"><h2>Définir un budget départemental</h2><button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Département <span class="req">*</span></label>
+        <select id="b-dept">${DEPARTMENTS.map(d=>`<option>${d}</option>`).join('')}</select>
+      </div>
+      <div class="fg"><label>Année de mandat</label>
+        <input type="number" id="b-year" value="${DB.cfg.mandateYear}" min="2020" max="2030"/>
+      </div>
+      <div class="fg"><label>Enveloppe budgétaire (FCFA) <span class="req">*</span></label>
+        <input type="number" id="b-amount" placeholder="ex: 100000" min="0" step="1000"/>
+      </div>
+      <div class="fg"><label>Notes</label><textarea id="b-notes" rows="2" placeholder="Optionnel"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveBudget()">Enregistrer</button>
+    </div>`);
+}
+function saveBudget(){
+  const dept=v('b-dept'),year=parseInt(v('b-year')),amt=parseInt(v('b-amount'));
+  if(!dept||isNaN(year)||isNaN(amt)||amt<=0){toast('Remplissez tous les champs.','err');return;}
+  const existing=DB.budgets.find(b=>b.department===dept&&b.mandateYear===year);
+  if(existing){const old={...existing};existing.allocated=amt;existing.notes=v('b-notes');addLog('UPDATE_BUDGET','budget',existing.id,old,existing);}
+  else{const nb={id:uid(),department:dept,mandateYear:year,allocated:amt,notes:v('b-notes'),createdBy:ME?.id,createdAt:nowStr()};DB.budgets.push(nb);addLog('CREATE_BUDGET','budget',nb.id,null,nb);}
+  persist();closeModal();renderBudgets();toast('Budget enregistré.','ok');
+}
+
+// ══════════════════════════════════════════════════════════
+// AUDIT LOG
+// ══════════════════════════════════════════════════════════
+function renderAudit(){
+  if(!isAdmin()&&!isLCP()){el('pg-audit').innerHTML=`<div class="card"><div class="alert alert-danger">Accès réservé aux administrateurs.</div></div>`;return;}
+  const logs=DB.auditLog.slice(0,200);
+  const actionDotClass={CREATE:'create',UPDATE:'update',DELETE:'delete',APPROVE_EXPENSE:'validate',REJECT_EXPENSE:'reject',MARK_PAID:'validate',LOGIN:'update',LOGOUT:'update',LOGIN_FAIL:'delete'};
+  const actionLabel={CREATE:'Création',UPDATE:'Modification',DELETE:'Suppression',APPROVE_EXPENSE:'Approbation dépense',REJECT_EXPENSE:'Rejet dépense',MARK_PAID:'Marquage payé',CREATE_BUDGET:'Budget créé',UPDATE_BUDGET:'Budget modifié',LOGIN:'Connexion',LOGOUT:'Déconnexion',LOGIN_FAIL:'Tentative connexion échouée',REGISTER:'Inscription'};
+  el('pg-audit').innerHTML=`
+    <div class="flex gap8" style="margin-bottom:16px">
+      <h3 style="font-size:15px;font-weight:600">Journal d'audit</h3>
+      <div class="ml-auto">
+        <button class="btn btn-secondary btn-sm" onclick="exportAuditLog()">Export CSV</button>
+      </div>
+    </div>
+    <div class="card">
+      ${logs.length?logs.map(l=>`<div class="log-entry">
+        <div class="log-dot ${actionDotClass[l.action]||'update'}"></div>
+        <div>
+          <div class="log-text"><strong>${l.userName||'?'}</strong> (${l.userRole||'?'}) — ${actionLabel[l.action]||l.action}${l.entityType?` [${l.entityType}]`:''}</div>
+          ${l.newVal?.docNum?`<div class="text-sm text-muted">Document : ${l.newVal.docNum}</div>`:''}
+          ${l.newVal?.status?`<div class="text-sm text-muted">Statut → ${l.newVal.status}</div>`:''}
+          <div class="log-time">${l.ts}</div>
+        </div>
+      </div>`).join(''):`<div class="empty-state"><p>Aucune entrée dans le journal.</p></div>`}
+    </div>`;
+}
+function exportAuditLog(){
+  const rows=[['Date','Utilisateur','Rôle','Action','Type entité','ID entité','Détails'],...DB.auditLog.map(l=>[l.ts,l.userName,l.userRole,l.action,l.entityType||'',l.entityId||'',JSON.stringify(l.newVal||{}).substring(0,100)])];
+  downloadCSV(rows,`audit_log_${today()}.csv`);
+}
+
+// ══════════════════════════════════════════════════════════
+// REPORTS & EXPORT
+// ══════════════════════════════════════════════════════════
+function renderReports(){
+  const txs=DB.transactions;
+  const totalRev=txs.filter(t=>t.type==='revenue').reduce((s,t)=>s+t.amount,0);
+  const totalExp=txs.filter(t=>t.type==='expense'&&t.workflowStatus!=='rejected').reduce((s,t)=>s+t.amount,0);
+  el('pg-reports').innerHTML=`
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exports disponibles</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        <div class="card card-sm" style="border:1.5px solid var(--blue-bg)">
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">📊 Export MC National</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Format CSV pour le rapport au Comité National AIESEC Bénin.</p>
+          <button class="btn btn-primary btn-sm w100" onclick="exportMCNational()">Télécharger CSV</button>
+        </div>
+        <div class="card card-sm" style="border:1.5px solid var(--green-bg)">
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">📥 Export Revenus complet</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Toutes les entrées avec statuts et détails.</p>
+          <button class="btn btn-secondary btn-sm w100" onclick="exportRevCSV()">Télécharger CSV</button>
+        </div>
+        <div class="card card-sm" style="border:1.5px solid var(--orange-bg)">
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">📤 Export Dépenses complet</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Toutes les dépenses avec workflow de validation.</p>
+          <button class="btn btn-secondary btn-sm w100" onclick="exportExpCSV()">Télécharger CSV</button>
+        </div>
+        <div class="card card-sm" style="border:1.5px solid var(--teal-bg)">
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">💾 Sauvegarde complète (JSON)</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Exportez toutes les données pour sauvegarde.</p>
+          <button class="btn btn-secondary btn-sm w100" onclick="exportJSON()">Télécharger JSON</button>
+        </div>
+        <div class="card card-sm" style="border:1.5px solid var(--purple-bg)">
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px">📤 Importer données</div>
+          <p class="text-sm text-muted" style="margin-bottom:10px">Restaurez à partir d'une sauvegarde JSON.</p>
+          <button class="btn btn-secondary btn-sm w100" onclick="document.getElementById('imp-file').click()">Importer JSON</button>
+          <input type="file" id="imp-file" accept=".json" style="display:none" onchange="importJSON(this)"/>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Résumé financier — ${DB.cfg.term}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+        <div><div class="text-xs text-muted" style="margin-bottom:4px">Total revenus</div><div style="font-size:22px;font-weight:700;color:var(--blue)">${fmtXOF(totalRev)}</div></div>
+        <div><div class="text-xs text-muted" style="margin-bottom:4px">Total dépenses</div><div style="font-size:22px;font-weight:700;color:var(--red)">${fmtXOF(totalExp)}</div></div>
+        <div><div class="text-xs text-muted" style="margin-bottom:4px">Balance nette</div><div style="font-size:22px;font-weight:700;color:${totalRev-totalExp>=0?'var(--green)':'var(--red)'}">${fmtXOF(totalRev-totalExp)}</div></div>
+      </div>
+      <div style="margin-top:14px">
+        ${DEPARTMENTS.map(d=>{
+          const r=DB.transactions.filter(t=>t.type==='revenue'&&t.department===d).reduce((s,t)=>s+t.amount,0);
+          const e=DB.transactions.filter(t=>t.type==='expense'&&t.department===d&&t.workflowStatus!=='rejected').reduce((s,t)=>s+t.amount,0);
+          if(!r&&!e)return '';
+          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px">
+            <span><span class="badge badge-${DEPT_COLORS[d]||'gray'}">${d}</span></span>
+            <span>Rev : ${fmtXOF(r)}</span><span>Dep : ${fmtXOF(e)}</span>
+            <span style="font-weight:600;color:${r-e>=0?'var(--green)':'var(--red)'}">${fmtXOF(r-e)}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+function exportMCNational(){
+  const rows=[['N° Document','Type','Date','Département','Motif Code','Motif Libellé','Client/Fournisseur','EXPA ID','Montant XOF','Statut','Mode Paiement','Workflow','Terme','Créé par'],...DB.transactions.map(t=>[t.docNum||'',t.type==='revenue'?'Entrée':'Sortie',t.date||'',t.department||'',t.motifCode||'',t.motifLabel||'',t.client||t.supplier||t.description||'',t.expaId||'',t.amount||0,t.type==='revenue'?t.status:t.workflowStatus,t.payMode||'',t.workflowStatus||'',DB.cfg.term,t.createdByName||''])];
+  downloadCSV(rows,`MC_Report_${DB.cfg.lc.replace(/\s/g,'_')}_${today()}.csv`);
+  toast('Export MC National téléchargé.','ok');
+}
+function exportRevCSV(){
+  const rows=[['N°','Date','Échéance','Type','Client','Email','IFU','EXPA ID','Motif','Département','Montant FCFA','Statut','Mode paiement','Terme','Créé par'],...DB.transactions.filter(t=>t.type==='revenue').map(t=>[t.docNum||'',t.date||'',t.dueDate||'',t.docType||'',t.client||'',t.clientEmail||'',t.clientIFU||'',t.expaId||'',t.motifLabel||'',t.department||'',t.amount||0,t.status||'',t.payMode||'',t.term||DB.cfg.term,t.createdByName||''])];
+  downloadCSV(rows,`Revenus_${today()}.csv`);toast('Export revenus téléchargé.','ok');
+}
+function exportExpCSV(){
+  const rows=[['N°','Date','Description','Catégorie','Département','Montant FCFA','Fournisseur','Pièce jointe','Workflow','Motif rejet','Terme','Créé par'],...DB.transactions.filter(t=>t.type==='expense').map(t=>[t.docNum||'',t.date||'',t.description||'',t.motifLabel||'',t.department||'',t.amount||0,t.supplier||'',t.proofFile||'',t.workflowStatus||'',t.rejectReason||'',DB.cfg.term,t.createdByName||''])];
+  downloadCSV(rows,`Depenses_${today()}.csv`);toast('Export dépenses téléchargé.','ok');
+}
+function exportJSON(){
+  const b=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`SGF-A_Backup_${today()}.json`;a.click();
+  toast('Sauvegarde exportée.','ok');
+}
+function importJSON(input){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const p=JSON.parse(e.target.result);
+      if(p.transactions){DB.transactions=p.transactions;}
+      if(p.budgets){DB.budgets=p.budgets;}
+      if(p.users){DB.users=p.users;}
+      if(p.auditLog){DB.auditLog=p.auditLog;}
+      if(p.cfg){DB.cfg={...DEFAULT_CFG,...p.cfg};}
+      if(p.invoiceSeq){DB.invoiceSeq=p.invoiceSeq;}
+      persist();updateSidebar();renderReports();
+      toast('Données importées avec succès !','ok');
+    }catch(x){toast('Fichier invalide.','err');}
+  };r.readAsText(f);
+}
+function downloadCSV(rows,name){
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));a.download=name;a.click();
+}
+
+// ══════════════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════════════
+function renderSettings(){
+  if(!isAdmin()){el('pg-settings').innerHTML=`<div class="alert alert-danger">Accès réservé au VP Finance & Legal.</div>`;return;}
+  const c=DB.cfg;
+  el('pg-settings').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="card">
+        <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Organisation</div>
+        <div class="fg"><label>Nom de l'organisation</label><input id="s-org" value="${c.org}"/></div>
+        <div class="fg"><label>Comité Local (LC)</label><input id="s-lc" value="${c.lc}"/></div>
+        <div class="fg"><label>Terme / Mandat</label><input id="s-term" value="${c.term}"/></div>
+        <div class="fg-row">
+          <div class="fg"><label>Année de mandat</label><input type="number" id="s-myear" value="${c.mandateYear}"/></div>
+          <div class="fg"><label>IFU</label><input id="s-ifu" value="${c.ifu}" placeholder="Identifiant Fiscal Unique"/></div>
+        </div>
+        <div class="fg"><label>Email officiel</label><input type="email" id="s-email" value="${c.email}"/></div>
+        <div class="fg"><label>Téléphone</label><input id="s-phone" value="${c.phone}"/></div>
+        <div class="fg"><label>Adresse</label><textarea id="s-addr" rows="2">${c.addr}</textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Paiement &amp; Facturation</div>
+        <div class="fg"><label>MTN MoMo (numéro officiel)</label><input id="s-mtn" value="${c.momoMTN}" placeholder="01 90 19 28 10"/></div>
+        <div class="fg"><label>Moov Money (numéro officiel)</label><input id="s-moov" value="${c.momoMoov}" placeholder=""/></div>
+        <div class="fg"><label>Banque</label><input id="s-bank" value="${c.bankName}"/></div>
+        <div class="fg"><label>N° Compte bancaire</label><input id="s-baccount" value="${c.bankAccount}"/></div>
+        <div class="fg"><label>Titulaire du compte</label><input id="s-bholder" value="${c.bankHolder}"/></div>
+        <div class="fg-row3">
+          <div class="fg"><label>Préfixe Facture</label><input id="s-pfac" value="${c.prefixFac}"/></div>
+          <div class="fg"><label>Préfixe Reçu</label><input id="s-prec" value="${c.prefixRec}"/></div>
+          <div class="fg"><label>Préfixe Devis</label><input id="s-pdev" value="${c.prefixDev||'DEV'}"/></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Responsable Finance</div>
+        <div class="fg"><label>Nom complet</label><input id="s-finname" value="${c.finName}"/></div>
+        <div class="fg"><label>Titre / Rôle</label><input id="s-finrole" value="${c.finRole}"/></div>
+        <div class="fg"><label>Email</label><input type="email" id="s-finemail" value="${c.finEmail}"/></div>
+        <div class="fg"><label>Téléphone</label><input id="s-finphone" value="${c.finPhone}"/></div>
+        <div class="fg"><label>Note standard (bas de factures)</label><textarea id="s-notes" rows="3">${c.defaultNotes}</textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Sécurité &amp; Accès</div>
+        <div class="fg"><label>Code d'accès (inscription VP F&L / LCP)</label><input type="password" id="s-acode" placeholder="Laisser vide pour ne pas modifier" autocomplete="new-password"/></div>
+        <div class="fg"><label>Seuil validation LCP (FCFA)</label><input type="number" id="s-thresh" value="${c.validationThreshold}" min="0" step="1000"/><span class="hint">Dépenses ≥ ce montant nécessitent l'approbation du LCP</span></div>
+        <div style="margin-top:16px">
+          <div class="sec-div">Utilisateurs enregistrés</div>
+          ${DB.users.map(u=>`<div class="flex gap8" style="padding:7px 0;border-bottom:1px solid var(--line)">
+            <div class="sb-av" style="width:28px;height:28px;font-size:10px;background:${u.role==='vpfl'?'var(--blue)':u.role==='lcp'?'var(--teal)':'var(--gray)'}">${(u.fname[0]+u.lname[0]).toUpperCase()}</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:500">${u.fname} ${u.lname}</div><div class="text-xs text-muted">@${u.username} — ${{vpfl:'VP F&L',lcp:'LCP',vpd:'VP Dept '+u.dept}[u.role]||u.role}</div></div>
+            ${u.id!=='u0'&&isAdmin()?`<button class="btn btn-xs" onclick="deleteUser('${u.id}')" style="background:var(--red-bg);color:var(--red);border:none">Suppr.</button>`:''}
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px;display:flex;justify-content:flex-end">
+      <button class="btn btn-primary" onclick="saveSettings()">Sauvegarder les paramètres</button>
+    </div>`;
+}
+function saveSettings(){
+  const c=DB.cfg;
+  c.org=v('s-org')||c.org;c.lc=v('s-lc')||c.lc;c.term=v('s-term')||c.term;
+  c.mandateYear=parseInt(v('s-myear'))||c.mandateYear;
+  c.ifu=v('s-ifu');c.email=v('s-email');c.phone=v('s-phone');c.addr=v('s-addr');
+  c.momoMTN=v('s-mtn');c.momoMoov=v('s-moov');
+  c.bankName=v('s-bank');c.bankAccount=v('s-baccount');c.bankHolder=v('s-bholder');
+  c.prefixFac=v('s-pfac')||c.prefixFac;c.prefixRec=v('s-prec')||c.prefixRec;c.prefixDev=v('s-pdev')||c.prefixDev;
+  c.finName=v('s-finname');c.finRole=v('s-finrole');c.finEmail=v('s-finemail');c.finPhone=v('s-finphone');
+  c.defaultNotes=v('s-notes');
+  c.validationThreshold=parseInt(v('s-thresh'))||c.validationThreshold;
+  const nc=v('s-acode');if(nc.length>=4)c.accessCode=nc;
+  addLog('UPDATE_SETTINGS','config',null,null,{updatedAt:nowStr()});
+  persist();updateSidebar();renderSettings();toast('Paramètres sauvegardés !','ok');
+}
+function deleteUser(id){
+  if(!confirm('Supprimer cet utilisateur ?'))return;
+  DB.users=DB.users.filter(u=>u.id!==id);
+  addLog('DELETE_USER','user',id,null,null);
+  persist();renderSettings();toast('Utilisateur supprimé.','warn');
+}
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+function init(){
+  loadDB();
+  // Check session
+  try{
+    const s=sessionStorage.getItem('sgfa_s');
+    if(s){const p=JSON.parse(s);const u=DB.users.find(x=>x.id===p.id&&x.username===p.username);if(u){ME=u;enterApp();return;}}
+  }catch(e){}
+  el('AUTH').style.display='flex';
+  el('APP').classList.add('hidden');
+}
+init();
+</script>
+</body>
+</html>
