@@ -358,7 +358,7 @@ code{font-family:'JetBrains Mono',monospace;font-size:12px;}
       <div class="fg" id="rcode-wrap">
         <label>Code d'accès <span class="req">*</span></label>
         <input type="password" id="rcode" placeholder="Requis pour VP F&L et LCP"/>
-        <span class="hint">Demandez ce code à votre LC Manager</span>
+        <span class="hint" id="rcode-hint">Demandez le code à l'administrateur</span>
       </div>
       <button class="btn btn-primary w100" onclick="doRegister()">Créer mon compte</button>
       <div class="auth-switch">Déjà un compte ? <a onclick="showForm('LF')">Se connecter</a></div>
@@ -408,6 +408,10 @@ code{font-family:'JetBrains Mono',monospace;font-size:12px;}
     Budgets
   </div>
   <div class="sb-sec">Rapports</div>
+  <div class="sb-item" data-pg="users" onclick="goTo('users',this)" id="sb-users">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Utilisateurs
+  </div>
   <div class="sb-item" data-pg="audit" onclick="goTo('audit',this)" id="sb-audit">
     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
     Audit &amp; Logs
@@ -462,6 +466,8 @@ code{font-family:'JetBrains Mono',monospace;font-size:12px;}
     <div class="pg" id="pg-invoices"></div>
     <!-- BUDGETS -->
     <div class="pg" id="pg-budgets"></div>
+    <!-- USERS -->
+    <div class="pg" id="pg-users"></div>
     <!-- AUDIT -->
     <div class="pg" id="pg-audit"></div>
     <!-- REPORTS -->
@@ -507,13 +513,17 @@ const DEFAULT_CFG = {
   defaultNotes: 'Si le paiement et le scan du re\u00E7u ne sont pas re\u00E7us dans les d\u00E9lais, des sanctions seront appliqu\u00E9es. En cas de dette, contactez le VP F&L dans les plus brefs d\u00E9lais.',
   validationThreshold: 25000,
   accessCode: 'aiesec2025',
+  codeVpfl:'vpfl2025', codeLcp:'lcp2025', codeComptable:'compta2025',
+  codeTlfl:'', codeTmfl:'', codeAuditeur:'audit2025',
+  entityType:'LC', lcMandateStart:'02-01', lcMandateEnd:'01-31',
+  mcMandateStart:'07-01', mcMandateEnd:'06-30',
   prefixFac: 'FAC',
   prefixRec: 'REC',
   prefixDev: 'DEV'
 };
 
-const DEPARTMENTS = ['oGV','iGT','iGV','BD','IM','TM','MKT','ADMIN'];
-const DEPT_COLORS = {oGV:'blue',iGT:'teal',iGV:'purple',BD:'orange',IM:'green',TM:'red',MKT:'yellow',ADMIN:'gray'};
+const DEPARTMENTS = ['MX','ICX','OGX','IM','OD','MKT & PR','BD & EWA','FL'];
+const DEPT_COLORS = {MX:'blue',ICX:'teal',OGX:'purple',IM:'green',OD:'orange','MKT & PR':'yellow','BD & EWA':'orange',FL:'teal'};
 
 const GFB_COA = [
   {c:'1301-OA-CI-LC',n:'1301',g:'OA',t:'CI',l:'LC',lb:'Cash Receipts from Product: iGV',ex:'Cash collected from iGV Opportunity Provider as Partner Fee, Accomodation Fee from Exchange Particip'},
@@ -985,7 +995,7 @@ function loadDB(){
     if(raw){ const p=JSON.parse(raw); DB={cfg:{...DEFAULT_CFG,...p.cfg}, transactions:p.transactions||[], budgets:p.budgets||[], users:p.users||[], auditLog:p.auditLog||[], invoiceSeq:p.invoiceSeq||{FAC:0,REC:0,DEV:0}}; }
   }catch(e){}
   if(!DB.users.length){
-    DB.users.push({id:'u0',username:'admin',fname:'Admin',lname:'AIESEC',role:'vpfl',dept:null,pw:hashPW('aiesec2025'),created:nowStr()});
+    DB.users.push({id:'u0',username:'admin',fname:'Admin',lname:'AIESEC',role:'admin',tasks:[],pw:hashPW('aiesec2025'),created:nowStr()});
     persist();
   }
 }
@@ -1016,10 +1026,19 @@ function genDocNum(type){
 function genQRHash(txId){let h=0;const s='sgfa'+txId;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h).toString(36).toUpperCase();}
 
 // Roles
-function isAdmin(){return ME&&(ME.role==='vpfl');}
-function isLCP(){return ME&&(ME.role==='lcp');}
-function canCreate(){return ME&&(ME.role==='vpfl'||ME.role==='lcp');}
-function canEdit(tx){if(!ME)return false;if(tx.isImmutable)return false;return ME.role==='vpfl';}
+const ROLE_CODES_MAP = {vpfl:'codeVpfl',lcp:'codeLcp',comptable:'codeComptable',tlfl:'codeTlfl',tmfl:'codeTmfl',auditeur:'codeAuditeur',admin:'adminCode'};
+const ROLES_INFO = {admin:{label:'Administrateur',col:'purple'},vpfl:{label:'VP Finance & Legal',col:'blue'},lcp:{label:'LCP / Ordonnateur',col:'teal'},comptable:{label:'Comptable',col:'green'},tlfl:{label:'Team Leader FL',col:'orange'},tmfl:{label:'Team Member FL',col:'orange'},auditeur:{label:'Auditeur',col:'gray'}};
+function isAdmin(){return ME&&ME.role==='admin';}
+function isLCP(){return ME&&ME.role==='lcp';}
+function isVpfl(){return ME&&ME.role==='vpfl';}
+function isAuditeur(){return ME&&ME.role==='auditeur';}
+function hasTask(t){return ME&&ME.tasks&&(ME.tasks.includes(t)||ME.tasks.includes('all'));}
+function canCreate(){if(!ME)return false;if(['vpfl','comptable'].includes(ME.role))return true;return ['tlfl','tmfl'].includes(ME.role)&&hasTask('create');}
+function canCreateInvoice(){if(!ME)return false;if(['vpfl','comptable'].includes(ME.role))return true;return ['tlfl','tmfl'].includes(ME.role)&&(hasTask('create')||hasTask('create_invoice'));}
+function canCreateReceipt(){if(!ME)return false;if(['vpfl','comptable'].includes(ME.role))return true;return ['tlfl','tmfl'].includes(ME.role)&&(hasTask('create')||hasTask('create_receipt'));}
+function canExport(){if(!ME)return false;if(['vpfl','comptable','lcp','auditeur','admin'].includes(ME.role))return true;return ['tlfl','tmfl'].includes(ME.role)&&hasTask('export');}
+function canEdit(tx){if(!ME)return false;if(tx.isImmutable)return false;if(['vpfl','comptable'].includes(ME.role))return true;return ['tlfl','tmfl'].includes(ME.role)&&hasTask('edit');}
+function canApprove(){return ME&&ME.role==='lcp';}
 function canDelete(tx){
   if(!ME) return false;
   if(tx.createdBy===ME.id && !tx.isImmutable) return true;
@@ -1053,9 +1072,12 @@ function showForm(id){
   ['LF','RF'].forEach(x=>el(x).classList.toggle('hidden',x!==id));
 }
 function toggleRoleCode(){
-  const r=v('rrole');
-  el('rdept-wrap').style.display=r==='vpd'?'block':'none';
-  el('rcode-wrap').style.display=r==='vpd'?'none':'block';
+  const r=v('rrole'),noCode=['tlfl','tmfl'];
+  if(el('rdept-wrap'))el('rdept-wrap').style.display='none';
+  el('rcode-wrap').style.display=noCode.includes(r)?'none':'block';
+  const hints={vpfl:'Code VP F&L',lcp:'Code LCP',comptable:'Code Comptable',auditeur:'Code Auditeur'};
+  const hint=el('rcode-hint');
+  if(hint)hint.textContent=(hints[r]||'')+' \u2014 demand\u00E9 \u00E0 l\'administrateur';
 }
 function doLogin(){
   const u=v('lu'),p=v('lp'),err=el('lerr');
@@ -1076,8 +1098,13 @@ function doRegister(){
   if(pw.length<6){err.textContent='Mot de passe trop court (min. 6).';err.style.display='block';return;}
   if(pw!==pw2){err.textContent='Les mots de passe ne correspondent pas.';err.style.display='block';return;}
   if(DB.users.find(x=>x.username===u)){err.textContent="Ce nom d'utilisateur est d\u00E9j\u00E0 pris.";err.style.display='block';return;}
-  if(role!=='vpd'&&code!==DB.cfg.accessCode){err.textContent='Code d\'acc\u00E8s incorrect.';err.style.display='block';return;}
-  const nu={id:uid(),username:u,fname:fn,lname:ln,role,dept:role==='vpd'?dept:null,pw:hashPW(pw),created:nowStr()};
+  const _nc=['tlfl','tmfl'];
+  if(!_nc.includes(role)){
+    const _ck={vpfl:'codeVpfl',lcp:'codeLcp',comptable:'codeComptable',auditeur:'codeAuditeur',admin:'adminCode'};
+    const _exp=DB.cfg[_ck[role]||'accessCode']||DB.cfg.accessCode||'';
+    if(!_exp||code!==_exp){err.textContent='Code d\'acc\u00E8s incorrect pour ce r\u00F4le.';err.style.display='block';return;}
+  }
+  const nu={id:uid(),username:u,fname:fn,lname:ln,role,tasks:[],pw:hashPW(pw),created:nowStr()};
   DB.users.push(nu);persist();
   addLog('REGISTER','user',nu.id,null,{username:u,role});
   suc.textContent='Compte cr\u00E9\u00E9 ! Vous pouvez maintenant vous connecter.';suc.style.display='block';
@@ -1110,14 +1137,11 @@ function updateSidebar(){
   el('tb-lc').textContent=DB.cfg.lc;
 }
 function applyRoleUI(){
-  // Restrict UI based on role
-  const admin=isAdmin(), lcp=isLCP();
-  if(!admin){el('sb-settings').style.opacity='0.4';}
-  if(!admin){el('sb-audit').style.opacity='0.4';}
-  if(!admin&&!lcp){
-    el('btn-new-rev').style.display='none';
-    el('btn-new-exp').style.display='none';
-  }
+  const adm=isAdmin(),vp=isVpfl(),lcp=isLCP(),aud=isAuditeur();
+  if(!adm) el('sb-settings').style.display='none';
+  if(!adm&&!vp&&!lcp&&!aud){const a=el('sb-audit');if(a)a.style.display='none';}
+  if(!adm&&!vp&&!lcp&&!aud){const b=el('sb-budgets');if(b)b.style.display='none';}
+  if(!canCreate()){el('btn-new-rev').style.display='none';el('btn-new-exp').style.display='none';}
 }
 function updateSBCounts(){
   const revs=DB.transactions.filter(t=>t.type==='revenue');
@@ -1130,7 +1154,7 @@ function updateSBCounts(){
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // NAVIGATION
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
-const PAGE_TITLES={dashboard:'Tableau de bord',revenue:'Entr\u00E9es \u2014 Revenus',expenses:'Sorties \u2014 D\u00E9penses',invoices:'Factures & Re\u00E7us',budgets:'Budgets par d\u00E9partement',audit:'Audit & Journal',reports:'Rapports & Export',settings:'Param\u00E8tres'};
+const PAGE_TITLES={dashboard:'Tableau de bord',revenue:'Entr\u00E9es \u2014 Revenus',expenses:'Sorties \u2014 D\u00E9penses',invoices:'Factures & Re\u00E7us',budgets:'Budgets par d\u00E9partement',audit:'Audit & Journal',reports:'Rapports & Export',settings:'Param\u00E8tres',users:'Gestion des utilisateurs & t\u00E2ches'};
 function goTo(pg, el_item){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('act'));
@@ -1152,6 +1176,7 @@ function renderPage(pg){
     case 'audit': renderAudit();break;
     case 'reports': renderReports();break;
     case 'settings': renderSettings();break;
+    case 'users': renderUsers();break;
   }
 }
 
@@ -1626,7 +1651,7 @@ function buildExpTable(exps){
     <td>${t.proofFile?`<span class="badge badge-green">\u2713 Joint</span>`:`<span class="badge badge-gray">Absent</span>`}</td>
     <td>${wfBadge(t.workflowStatus)}</td>
     <td><div class="actions">
-      ${t.workflowStatus==='pending'&&canApprove()?`
+      ${t.workflowStatus==='pending'&&isLCP()?`
         <button class="btn btn-xs" onclick="approveExp('${t.id}')" style="background:var(--green-bg);color:#00814A;border:none">Approuver</button>
         <button class="btn btn-xs" onclick="rejectExp('${t.id}')" style="background:var(--red-bg);color:var(--red);border:none">Rejeter</button>`:''}
       ${canDelete(t)?`<button class="btn-icon" onclick="deleteTransaction('${t.id}')" title="Supprimer">
@@ -2421,10 +2446,10 @@ function saveBudget(){
 // AUDIT LOG
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 function renderAudit(){
-  if(!isAdmin()&&!isLCP()){el('pg-audit').innerHTML=`<div class="card"><div class="alert alert-danger">Acc\u00E8s r\u00E9serv\u00E9 aux administrateurs.</div></div>`;return;}
-  const logs=DB.auditLog.slice(0,200);
-  const actionDotClass={CREATE:'create',UPDATE:'update',DELETE:'delete',DELETE_JUSTIFIED:'delete',APPROVE_EXPENSE:'validate',REJECT_EXPENSE:'reject',MARK_PAID:'validate',LOGIN:'update',LOGOUT:'update',LOGIN_FAIL:'delete'};
-  const actionLabel={CREATE:'Cr\u00E9ation',UPDATE:'Modification',DELETE:'Suppression',DELETE_JUSTIFIED:'Suppression justifi\u00E9e',APPROVE_EXPENSE:'Approbation d\u00E9pense',REJECT_EXPENSE:'Rejet d\u00E9pense',MARK_PAID:'Marquage pay\u00E9',CREATE_BUDGET:'Budget cr\u00E9\u00E9',UPDATE_BUDGET:'Budget modifi\u00E9',LOGIN:'Connexion',LOGOUT:'D\u00E9connexion',LOGIN_FAIL:'Tentative connexion \u00E9chou\u00E9e',REGISTER:'Inscription',ADD_CUSTOM_ACCOUNT:'Compte GFB ajout\u00E9',DELETE_CUSTOM_ACCOUNT:'Compte GFB supprim\u00E9'};
+  if(!isAdmin()&&!isVpfl()&&!isLCP()&&!isAuditeur()){el('pg-audit').innerHTML='<div class="alert alert-danger">Acc\u00E8s non autoris\u00E9.</div>';return;}
+  const logs=DB.auditLog.filter(l=>l.action!=='LOGIN_FAIL').slice(0,200);
+  const actionDotClass={CREATE:'create',UPDATE:'update',DELETE:'delete',DELETE_JUSTIFIED:'delete',APPROVE_EXPENSE:'validate',REJECT_EXPENSE:'reject',MARK_PAID:'validate',LOGIN:'update',LOGOUT:'update'};
+  const actionLabel={CREATE:'Cr\u00E9ation',UPDATE:'Modification',DELETE:'Suppression',DELETE_JUSTIFIED:'Suppression justifi\u00E9e',APPROVE_EXPENSE:'Approbation d\u00E9pense',REJECT_EXPENSE:'Rejet d\u00E9pense',MARK_PAID:'Marquage pay\u00E9',CREATE_BUDGET:'Budget cr\u00E9\u00E9',UPDATE_BUDGET:'Budget modifi\u00E9',LOGIN:'Connexion',LOGOUT:'D\u00E9connexion',REGISTER:'Inscription',ADD_CUSTOM_ACCOUNT:'Compte GFB ajout\u00E9',DELETE_CUSTOM_ACCOUNT:'Compte GFB supprim\u00E9',TOGGLE_TASK:'T\u00E2che modifi\u00E9e',CREATE_USER:'Compte cr\u00E9\u00E9',SEND_EMAIL:'Email envoy\u00E9'};
   el('pg-audit').innerHTML=`
     <div class="flex gap8" style="margin-bottom:16px">
       <h3 style="font-size:15px;font-weight:600">Journal d'audit</h3>
@@ -2687,6 +2712,9 @@ function saveSettings(){
   c.defaultNotes=v('s-notes');
   c.validationThreshold=parseInt(v('s-thresh'))||c.validationThreshold;
   const nc=v('s-acode');if(nc.length>=4)c.accessCode=nc;
+  const sv=id=>v(id); // helper
+  const _rcodes=['codeVpfl','codeLcp','codeComptable','codeTlfl','codeTmfl','codeAuditeur'];
+  _rcodes.forEach(k=>{const fid='s-'+k.toLowerCase();const val=v(fid);if(val)c[k]=val;else if(el(fid))c[k]=el(fid).value||c[k];});
   // EmailJS
   const ejs_sid=v('s-ejs-sid'),ejs_tid=v('s-ejs-tid'),ejs_pk=v('s-ejs-pk');
   if(ejs_sid||ejs_tid||ejs_pk) c.emailjs={serviceId:ejs_sid,templateId:ejs_tid,publicKey:ejs_pk};
@@ -2732,6 +2760,188 @@ function filterCOA() {
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // INIT
 // \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// USERS MANAGEMENT & TASK ASSIGNMENT
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+const ALL_TASKS = [
+  {id:'create',        label:'Cr\u00e9er factures & re\u00e7us'},
+  {id:'create_invoice',label:'Cr\u00e9er factures uniquement'},
+  {id:'create_receipt',label:'Cr\u00e9er re\u00e7us uniquement'},
+  {id:'edit',          label:'Modifier les documents'},
+  {id:'export',        label:'Exporter (CSV/PDF)'},
+  {id:'view_budget',   label:'Voir les budgets'},
+  {id:'view_audit',    label:'Voir le journal d\'audit'},
+  {id:'all',           label:'Acc\u00e8s complet (tous droits)'}
+];
+
+function renderUsers(){
+  if(!isAdmin()&&!isVpfl()){
+    el('pg-users').innerHTML='<div class="alert alert-danger">Acc\u00e8s r\u00e9serv\u00e9 \u00e0 l\'administrateur et au VP F&L.</div>';return;
+  }
+  const colMap={admin:'purple',vpfl:'blue',lcp:'teal',comptable:'green',tlfl:'orange',tmfl:'orange',auditeur:'gray'};
+  const lbl=u=>(ROLES_INFO[u.role]||{label:u.role}).label;
+
+  let rows='';
+  DB.users.forEach(u=>{
+    const col=colMap[u.role]||'gray';
+    const tasksHtml=(u.role==='tlfl'||u.role==='tmfl')
+      ?'<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">'+
+        ALL_TASKS.map(t=>'<span class="badge badge-'+(u.tasks&&u.tasks.includes(t.id)?'blue':'gray')+'" style="cursor:pointer" onclick="toggleTask(\''+u.id+'\',\''+t.id+'\')">'+
+          (u.tasks&&u.tasks.includes(t.id)?'\u2713 ':'')+t.label+'</span>').join('')+'</div>'
+      :'<span class="text-sm text-muted">'+lbl(u)+'</span>';
+
+    rows+='<div style="background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:10px">';
+    rows+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:'+(u.role==='tlfl'||u.role==='tmfl'?'8':'0')+'px">';
+    rows+='<div class="sb-av" style="width:34px;height:34px;font-size:12px;flex-shrink:0;background:var(--'+col+')">'+
+      (u.fname[0]+u.lname[0]).toUpperCase()+'</div>';
+    rows+='<div style="flex:1"><div style="font-weight:600;font-size:13px">'+u.fname+' '+u.lname+'</div>';
+    rows+='<div class="text-xs text-muted">@'+u.username+' \u2014 '+lbl(u)+' \u2014 cr\u00e9\u00e9 le '+u.created+'</div></div>';
+    if(isAdmin()&&u.id!=='u0'){
+      rows+='<button class="btn btn-xs" onclick="deleteUser(\''+u.id+'\')" style="background:var(--red-bg);color:var(--red);border:none">Suppr.</button>';
+    }
+    rows+='</div>';
+    rows+=tasksHtml+'</div>';
+  });
+
+  el('pg-users').innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">' +
+    '<h3 style="font-size:15px;font-weight:600">Utilisateurs ('+DB.users.length+')</h3>' +
+    (isAdmin()?'<button class="btn btn-primary btn-sm" onclick="openAddUserModal()">+ Ajouter</button>':'') +
+    '</div>' +
+    '<div class="alert alert-info" style="margin-bottom:16px">'+
+    '\u2705 Les <strong>Team Leader FL</strong> et <strong>Team Member FL</strong> sont observateurs par d\u00e9faut. '+
+    'Cliquez sur les badges de t\u00e2ches pour leur attribuer des droits sp\u00e9cifiques.</div>'+
+    rows+
+    '<div style="margin-top:20px" class="card">'+
+    '<div class="card-title">Codes d\'acc\u00e8s par r\u00f4le</div>'+
+    '<div class="alert alert-warn" style="margin-bottom:12px">Communiquez ces codes aux membres selon leur r\u00f4le. Modifiables dans Param\u00e8tres.</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+
+    Object.entries({vpfl:'VP F&L',lcp:'LCP / Ordonnateur',comptable:'Comptable',tlfl:'Team Leader FL (aucun code)',tmfl:'Team Member FL (aucun code)',auditeur:'Auditeur'}).map(([role,label])=>
+      '<div style="background:var(--surface);border-radius:var(--r);padding:10px 12px">'+
+      '<div class="text-xs text-muted" style="margin-bottom:4px">'+label+'</div>'+
+      '<code style="font-size:13px;color:var(--blue)">'+(DB.cfg['code'+role.charAt(0).toUpperCase()+role.slice(1)]||DB.cfg['c'+role+'ode']||DB.cfg[Object.keys(DB.cfg).find(k=>k.toLowerCase().includes(role.replace('&','').replace(' ','')))]||'\u2014')+'</code>'+
+      '</div>'
+    ).join('')+
+    '</div></div>';
+}
+
+function toggleTask(userId, taskId){
+  if(!isAdmin()&&!isVpfl()){toast('Acc\u00e8s non autoris\u00e9.','err');return;}
+  const u=DB.users.find(x=>x.id===userId);
+  if(!u)return;
+  if(!u.tasks)u.tasks=[];
+  const idx=u.tasks.indexOf(taskId);
+  if(idx>=0) u.tasks.splice(idx,1);
+  else u.tasks.push(taskId);
+  addLog('TOGGLE_TASK','user',userId,null,{username:u.username,task:taskId,granted:u.tasks.includes(taskId)});
+  persist();
+  renderUsers();
+  toast((u.tasks.includes(taskId)?'T\u00e2che attribu\u00e9e':'T\u00e2che retir\u00e9e')+' : '+userId,'ok');
+}
+
+function openAddUserModal(){
+  showModal('adduser',
+    '<div class="modal-hdr"><h2>Ajouter un utilisateur</h2>'+
+    '<button class="btn-icon" onclick="closeModal()"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'+
+    '<div class="modal-body">'+
+    '<div class="fg-row"><div class="fg"><label>Pr\u00e9nom *</label><input id="au-fn" placeholder="Pr\u00e9nom"/></div>'+
+    '<div class="fg"><label>Nom *</label><input id="au-ln" placeholder="Nom"/></div></div>'+
+    '<div class="fg"><label>Nom d\'utilisateur *</label><input id="au-un" placeholder="identifiant"/></div>'+
+    '<div class="fg"><label>Mot de passe *</label><input type="password" id="au-pw" placeholder="Min. 6 caract\u00e8res"/></div>'+
+    '<div class="fg"><label>R\u00f4le *</label>'+
+    '<select id="au-role">'+
+    '<option value="vpfl">VP Finance & Legal</option>'+
+    '<option value="lcp">LCP / Ordonnateur</option>'+
+    '<option value="comptable">Comptable</option>'+
+    '<option value="tlfl">Team Leader FL</option>'+
+    '<option value="tmfl">Team Member FL</option>'+
+    '<option value="auditeur">Auditeur</option>'+
+    '</select></div></div>'+
+    '<div class="modal-foot">'+
+    '<button class="btn btn-secondary" onclick="closeModal()">Annuler</button>'+
+    '<button class="btn btn-primary" onclick="confirmAddUser()">Cr\u00e9er</button>'+
+    '</div>');
+}
+function confirmAddUser(){
+  const fn=v('au-fn'),ln=v('au-ln'),un=v('au-un').toLowerCase(),pw=v('au-pw'),role=v('au-role');
+  if(!fn||!ln||!un||pw.length<6){toast('Tous les champs (mdp min 6 car.)','err');return;}
+  if(DB.users.find(u=>u.username===un)){toast("Nom d'utilisateur d\u00e9j\u00e0 pris",'err');return;}
+  const nu={id:uid(),username:un,fname:fn,lname:ln,role,tasks:[],pw:hashPW(pw),created:nowStr()};
+  DB.users.push(nu);
+  addLog('CREATE_USER','user',nu.id,null,{username:un,role});
+  persist();closeModal();renderUsers();toast('Utilisateur cr\u00e9\u00e9 !','ok');
+}
+
+// \u2500\u2500 Update renderSettings to add role code fields \u2500\u2500
+const _origRenderSettings = renderSettings;
+function renderSettings(){
+  if(!isAdmin()){el('pg-settings').innerHTML='<div class="alert alert-danger">Acc\u00e8s r\u00e9serv\u00e9 \u00e0 l\'administrateur.</div>';return;}
+  _origRenderSettings();
+  // Inject role codes section into existing settings
+  setTimeout(()=>{
+    const existing=el('s-acode')?.closest('.card');
+    if(!existing||el('role-codes-section'))return;
+    const div=document.createElement('div');
+    div.id='role-codes-section';
+    div.className='card';
+    div.style.marginTop='12px';
+    div.innerHTML='<div class="card-title">Codes d\'acc\u00e8s par r\u00f4le</div>'+
+      '<div class="alert alert-info" style="margin-bottom:12px;font-size:12px">'+
+      'Chaque r\u00f4le a son propre code. Communiquez-le aux membres concern\u00e9s. '+
+      'Laisser vide = pas de code requis (Team FL).</div>'+
+      '<div class="fg-row">'+
+      '<div class="fg"><label>Code VP F&L</label><input id="s-codepfl" value="'+(DB.cfg.codeVpfl||'')+'" placeholder="vpfl2025"/></div>'+
+      '<div class="fg"><label>Code LCP</label><input id="s-codelcp" value="'+(DB.cfg.codeLcp||'')+'" placeholder="lcp2025"/></div>'+
+      '</div><div class="fg-row">'+
+      '<div class="fg"><label>Code Comptable</label><input id="s-codecomptable" value="'+(DB.cfg.codeComptable||'')+'" placeholder="compta2025"/></div>'+
+      '<div class="fg"><label>Code Auditeur</label><input id="s-codeauditeur" value="'+(DB.cfg.codeAuditeur||'')+'" placeholder="audit2025"/></div>'+
+      '</div><div class="fg-row">'+
+      '<div class="fg"><label>Type d\'entit\u00e9</label>'+
+      '<select id="s-entity"><option value="LC" '+(DB.cfg.entityType==='LC'?'selected':'')+'>LC (Comit\u00e9 Local)</option><option value="MC" '+(DB.cfg.entityType==='MC'?'selected':'')+'>MC (Comit\u00e9 National)</option></select></div>'+
+      '<div class="fg"><label>Mandat en cours</label>'+
+      '<input id="s-mandate" value="'+(DB.cfg.term||'')+'" placeholder="Term 25.26"/></div>'+
+      '</div>'+
+      '<button class="btn btn-primary" style="margin-top:10px" onclick="saveRoleCodes()">Enregistrer les codes</button>';
+    existing.parentNode.insertBefore(div, existing.nextSibling);
+  },100);
+}
+
+function saveRoleCodes(){
+  if(el('s-codepfl'))DB.cfg.codeVpfl=v('s-codepfl');
+  if(el('s-codelcp'))DB.cfg.codeLcp=v('s-codelcp');
+  if(el('s-codecomptable'))DB.cfg.codeComptable=v('s-codecomptable');
+  if(el('s-codeauditeur'))DB.cfg.codeAuditeur=v('s-codeauditeur');
+  if(el('s-entity'))DB.cfg.entityType=v('s-entity');
+  if(el('s-mandate'))DB.cfg.term=v('s-mandate');
+  persist();updSidebar&&updateSidebar();toast('Codes enregistr\u00e9s !','ok');
+}
+
+// \u2500\u2500 MANDATE PERIOD HELPER \u2500\u2500
+function getMandatePeriod(){
+  const now=new Date();
+  const y=now.getFullYear();
+  const type=DB.cfg.entityType||'LC';
+  let start, end;
+  if(type==='LC'){
+    // Feb 1 N -> Jan 31 N+1
+    const feb1=new Date(y,1,1);
+    if(now>=feb1){start=new Date(y,1,1);end=new Date(y+1,0,31);}
+    else{start=new Date(y-1,1,1);end=new Date(y,0,31);}
+  }else{
+    // Jul 1 N -> Jun 30 N+1
+    const jul1=new Date(y,6,1);
+    if(now>=jul1){start=new Date(y,6,1);end=new Date(y+1,5,30);}
+    else{start=new Date(y-1,6,1);end=new Date(y,5,30);}
+  }
+  return {
+    start:start.toISOString().split('T')[0],
+    end:end.toISOString().split('T')[0],
+    label:(type==='LC'?'1er F\u00e9vrier':'1er Juillet')+' '+start.getFullYear()+
+          ' \u2192 '+(type==='LC'?'31 Janvier':'30 Juin')+' '+end.getFullYear()
+  };
+}
+
+
 function init(){
   loadDB();
   // Check session
